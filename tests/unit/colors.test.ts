@@ -37,18 +37,18 @@ describe('getWaitLevelColor', () => {
 	});
 
 	it('returns gray for null', () => {
-		expect(getWaitLevelColor(null)).toBe('#9ca3af');
+		expect(getWaitLevelColor(null)).toBe('#64748b');
 	});
 
 	it('returns gray for undefined', () => {
-		expect(getWaitLevelColor(undefined)).toBe('#9ca3af');
+		expect(getWaitLevelColor(undefined)).toBe('#64748b');
 	});
 
 	it('returns gray for unknown level', () => {
-		expect(getWaitLevelColor(99)).toBe('#9ca3af');
+		expect(getWaitLevelColor(99)).toBe('#64748b');
 	});
 
 	it('returns gray for negative level', () => {
-		expect(getWaitLevelColor(-1)).toBe('#9ca3af');
+		expect(getWaitLevelColor(-1)).toBe('#64748b');
 	});
 });

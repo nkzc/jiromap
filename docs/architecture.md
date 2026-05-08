@@ -33,6 +33,7 @@ jiro/
 │   ├── hooks.server.ts             # バッチ集計ロジック（cron-worker.ts と共有）
 │   │
 │   ├── lib/
+│   │   ├── config.ts               # アプリ設定定数（NEARBY_RADIUS_M=5000 等）
 │   │   ├── types.ts                # 共有型定義（Shop, ShopStatus, Report）
 │   │   ├── api.ts                  # フロントエンド向け API クライアント
 │   │   ├── haversine.ts            # 距離計算（ハバーサイン公式）
@@ -142,4 +143,4 @@ jiro/
 | 2 | 黄 `#eab308` | 6〜10人 |
 | 3 | 橙 `#f97316` | 11人以上 |
 | 4 | 赤 `#ef4444` | 麺切れ/臨時休業 |
-| null | 灰 `#9ca3af` | 情報なし |
+| null | 灰 `#64748b` | 情報なし |

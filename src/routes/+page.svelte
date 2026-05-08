@@ -5,6 +5,7 @@
 	import ReportForm from '$lib/components/ReportForm.svelte';
 	import { fetchNearbyShops } from '$lib/api.js';
 	import { MOCK_SHOPS } from '$lib/mock-data.js';
+	import { NEARBY_RADIUS_M } from '$lib/config.js';
 	import type { Shop } from '$lib/types.js';
 	import { buildWebsiteJsonLd } from '$lib/seo.js';
 
@@ -29,7 +30,7 @@
 		loading = true;
 		error = '';
 		try {
-			shops = await fetchNearbyShops(lat, lng, 5000);
+			shops = await fetchNearbyShops(lat, lng, NEARBY_RADIUS_M);
 		} catch {
 			// API unavailable (e.g. Vite dev mode) – fall back to mock data
 			shops = MOCK_SHOPS;

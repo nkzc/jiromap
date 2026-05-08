@@ -51,10 +51,10 @@
 		markers = [];
 	}
 
-	function addShopMarkers(leaflet: typeof import('leaflet')) {
+	function addShopMarkers(leaflet: typeof import('leaflet'), shopList: Shop[]) {
 		if (!map) return;
 		clearMarkers();
-		for (const shop of shops) {
+		for (const shop of shopList) {
 			const color = getWaitLevelColor(shop.status?.current_wait_level);
 			const icon = createPinIcon(leaflet, color);
 			const marker = leaflet
@@ -65,15 +65,15 @@
 		}
 	}
 
-	function updateUserMarker(leaflet: typeof import('leaflet')) {
+	function updateUserMarker(leaflet: typeof import('leaflet'), lat: number | null, lng: number | null) {
 		if (!map) return;
 		if (userMarker) {
 			userMarker.remove();
 			userMarker = null;
 		}
-		if (userLat !== null && userLng !== null) {
+		if (lat !== null && lng !== null) {
 			userMarker = leaflet
-				.marker([userLat, userLng], { icon: createUserIcon(leaflet), zIndexOffset: 1000 })
+				.marker([lat, lng], { icon: createUserIcon(leaflet), zIndexOffset: 1000 })
 				.addTo(map);
 		}
 	}
@@ -102,8 +102,8 @@
 			maxZoom: 19
 		}).addTo(map);
 
-		addShopMarkers(L);
-		updateUserMarker(L);
+		addShopMarkers(L, shops);
+		updateUserMarker(L, userLat, userLng);
 	});
 
 	onDestroy(() => {
@@ -114,10 +114,10 @@
 	});
 
 	$: if (L && map) {
-		addShopMarkers(L);
+		addShopMarkers(L, shops);
 	}
 	$: if (L && map) {
-		updateUserMarker(L);
+		updateUserMarker(L, userLat, userLng);
 	}
 
 	export function panTo(lat: number, lng: number) {

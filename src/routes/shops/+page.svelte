@@ -4,6 +4,7 @@
 	import AdBanner from '$lib/components/AdBanner.svelte';
 	import { fetchNearbyShops } from '$lib/api.js';
 	import { MOCK_SHOPS } from '$lib/mock-data.js';
+	import { NEARBY_RADIUS_M } from '$lib/config.js';
 	import type { Shop } from '$lib/types.js';
 
 	const TOKYO_CENTER = { lat: 35.6585, lng: 139.7454 };
@@ -21,7 +22,7 @@
 		loading = true;
 		error = '';
 		try {
-			shops = await fetchNearbyShops(lat, lng, 10000);
+			shops = await fetchNearbyShops(lat, lng, NEARBY_RADIUS_M);
 		} catch {
 			shops = MOCK_SHOPS;
 		} finally {
