@@ -16,6 +16,8 @@
 	let shops: Shop[] = [];
 	let currentLat = TOKYO_CENTER.lat;
 	let currentLng = TOKYO_CENTER.lng;
+	let userLat: number | null = null;
+	let userLng: number | null = null;
 	let selectedShop: Shop | null = null;
 	let showReport = false;
 	let loading = false;
@@ -62,6 +64,8 @@
 				(pos) => {
 					currentLat = pos.coords.latitude;
 					currentLng = pos.coords.longitude;
+					userLat = pos.coords.latitude;
+					userLng = pos.coords.longitude;
 					mapComponent?.panTo(currentLat, currentLng);
 					loadShops(currentLat, currentLng);
 				},
@@ -80,6 +84,8 @@
 				(pos) => {
 					currentLat = pos.coords.latitude;
 					currentLng = pos.coords.longitude;
+					userLat = pos.coords.latitude;
+					userLng = pos.coords.longitude;
 					mapComponent?.panTo(currentLat, currentLng);
 					loadShops(currentLat, currentLng);
 				},
@@ -120,6 +126,8 @@
 			{shops}
 			centerLat={currentLat}
 			centerLng={currentLng}
+			{userLat}
+			{userLng}
 			onShopClick={handleShopClick}
 		/>
 

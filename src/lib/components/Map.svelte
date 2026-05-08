@@ -9,10 +9,13 @@
 	export let centerLng: number = 139.7454;
 	export let zoom: number = 13;
 	export let onShopClick: (shop: Shop) => void = () => {};
+	export let userLat: number | null = null;
+	export let userLng: number | null = null;
 
 	let mapEl: HTMLDivElement;
 	let map: LeafletMap | null = null;
 	let markers: Marker[] = [];
+	let userMarker: import('leaflet').Marker | null = null;
 	let L: typeof import('leaflet') | null = null;
 
 	function createPinIcon(leaflet: typeof import('leaflet'), color: string): import('leaflet').DivIcon {
@@ -27,6 +30,17 @@
 			iconSize: [24, 36],
 			iconAnchor: [12, 36],
 			popupAnchor: [0, -36]
+		});
+	}
+
+	function createUserIcon(leaflet: typeof import('leaflet')): import('leaflet').DivIcon {
+		const html = `<div style="width:16px;height:16px;background:#2563eb;border:3px solid #fff;border-radius:50%;box-shadow:0 0 0 4px rgba(37,99,235,0.3)"></div>`;
+		return leaflet.divIcon({
+			html,
+			className: '',
+			iconSize: [16, 16],
+			iconAnchor: [8, 8],
+			popupAnchor: [0, -8]
 		});
 	}
 
@@ -48,6 +62,19 @@
 				.addTo(map);
 			marker.on('click', () => onShopClick(shop));
 			markers.push(marker);
+		}
+	}
+
+	function updateUserMarker(leaflet: typeof import('leaflet')) {
+		if (!map) return;
+		if (userMarker) {
+			userMarker.remove();
+			userMarker = null;
+		}
+		if (userLat !== null && userLng !== null) {
+			userMarker = leaflet
+				.marker([userLat, userLng], { icon: createUserIcon(leaflet), zIndexOffset: 1000 })
+				.addTo(map);
 		}
 	}
 
@@ -76,17 +103,21 @@
 		}).addTo(map);
 
 		addShopMarkers(L);
+		updateUserMarker(L);
 	});
 
 	onDestroy(() => {
 		clearMarkers();
+		userMarker?.remove();
 		map?.remove();
 		map = null;
 	});
 
-	// Reactively update markers when shops change
 	$: if (L && map) {
 		addShopMarkers(L);
+	}
+	$: if (L && map) {
+		updateUserMarker(L);
 	}
 
 	export function panTo(lat: number, lng: number) {

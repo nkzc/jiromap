@@ -47,6 +47,7 @@ jiro/
 │   │   │
 │   │   └── components/
 │   │       ├── Map.svelte          # Leaflet 地図（SSR 非対応, onMount で動的 import）
+│       │                       #   props: userLat/userLng — 現在地ピン（青ドット）表示
 │   │       ├── ShopCard.svelte     # 店舗カード（地図のポップアップ）
 │   │       ├── ReportForm.svelte   # 混雑投稿フォーム
 │   │       ├── WaitLevelBadge.svelte # 混雑レベルバッジ
