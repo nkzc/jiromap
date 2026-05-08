@@ -1,0 +1,105 @@
+<script lang="ts">
+	import { onMount, onDestroy } from 'svelte';
+	import type { Map as LeafletMap, Marker } from 'leaflet';
+	import type { Shop } from '../types.js';
+	import { getWaitLevelColor } from '../colors.js';
+
+	export let shops: Shop[] = [];
+	export let centerLat: number = 35.6585;
+	export let centerLng: number = 139.7454;
+	export let zoom: number = 13;
+	export let onShopClick: (shop: Shop) => void = () => {};
+
+	let mapEl: HTMLDivElement;
+	let map: LeafletMap | null = null;
+	let markers: Marker[] = [];
+	let L: typeof import('leaflet') | null = null;
+
+	function createPinIcon(leaflet: typeof import('leaflet'), color: string): import('leaflet').DivIcon {
+		const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 36" width="24" height="36">
+    <path d="M12 0C5.373 0 0 5.373 0 12c0 9 12 24 12 24s12-15 12-24C24 5.373 18.627 0 12 0z"
+          fill="${color}" stroke="#ffffff" stroke-width="1.5"/>
+    <circle cx="12" cy="12" r="5" fill="#ffffff"/>
+  </svg>`;
+		return leaflet.divIcon({
+			html: svg,
+			className: '',
+			iconSize: [24, 36],
+			iconAnchor: [12, 36],
+			popupAnchor: [0, -36]
+		});
+	}
+
+	function clearMarkers() {
+		for (const marker of markers) {
+			marker.remove();
+		}
+		markers = [];
+	}
+
+	function addShopMarkers(leaflet: typeof import('leaflet')) {
+		if (!map) return;
+		clearMarkers();
+		for (const shop of shops) {
+			const color = getWaitLevelColor(shop.status?.current_wait_level);
+			const icon = createPinIcon(leaflet, color);
+			const marker = leaflet
+				.marker([shop.lat, shop.lng], { icon })
+				.addTo(map);
+			marker.on('click', () => onShopClick(shop));
+			markers.push(marker);
+		}
+	}
+
+	onMount(async () => {
+		// Leaflet must be dynamically imported inside onMount to avoid SSR issues
+		L = await import('leaflet');
+
+		// Fix default icon paths for Vite build
+		// @ts-expect-error
+		delete L.Icon.Default.prototype._getIconUrl;
+		L.Icon.Default.mergeOptions({
+			iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+			iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+			shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png'
+		});
+
+		map = L.map(mapEl, { zoomControl: false }).setView([centerLat, centerLng], zoom);
+
+		// Zoom control at bottom-right (avoids hamburger menu on mobile)
+		L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+		// OpenStreetMap tiles
+		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+			maxZoom: 19
+		}).addTo(map);
+
+		addShopMarkers(L);
+	});
+
+	onDestroy(() => {
+		clearMarkers();
+		map?.remove();
+		map = null;
+	});
+
+	// Reactively update markers when shops change
+	$: if (L && map) {
+		addShopMarkers(L);
+	}
+
+	export function panTo(lat: number, lng: number) {
+		map?.panTo([lat, lng]);
+	}
+</script>
+
+<div bind:this={mapEl} class="map-container"></div>
+
+<style>
+	.map-container {
+		width: 100%;
+		height: 100%;
+		min-height: 300px;
+	}
+</style>

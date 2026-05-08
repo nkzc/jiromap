@@ -1,0 +1,63 @@
+# ===========================
+# Node.js
+# ===========================
+node_modules/
+dist/
+.svelte-kit/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ===========================
+# Cloudflare / Wrangler
+# ===========================
+# wrangler がローカルに作る D1/KV キャッシュ・ステート・一時ビルド
+.wrangler/
+# ローカル開発用の環境変数（IP_HASH_SALT など）
+.dev.vars
+# wrangler コマンドの一時出力ファイル
+wrangler-*.txt
+
+# ===========================
+# 環境変数
+# ===========================
+.env
+.env.local
+.env.test
+.env.*.local
+
+# ===========================
+# テスト・カバレッジ
+# ===========================
+coverage/
+
+# ===========================
+# Claude Code
+# ===========================
+# Claude Code のローカル設定（プロジェクト固有の設定は settings.json のみ管理）
+.claude/settings.local.json
+
+# ===========================
+# OS 生成ファイル
+# ===========================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ===========================
+# エディタ・IDE
+# ===========================
+.idea/
+.vscode/
+*.swp
+*.swo
+*~

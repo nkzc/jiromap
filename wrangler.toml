@@ -1,0 +1,21 @@
+name = "jiromap"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".svelte-kit/cloudflare"
+
+# Cron Trigger: Cloudflare Pages は wrangler.toml で crons 設定不可。
+# デプロイ後に Cloudflare ダッシュボード → Pages → Settings → Functions → Cron Triggers
+# で "*/1 * * * *" を手動設定すること。
+
+# D1 Database binding
+# TODO: Run `wrangler login` then `wrangler d1 create jiromap` and replace database_id below
+[[d1_databases]]
+binding = "DB"
+database_name = "jiromap"
+database_id = "5c2500bc-4980-4db5-ae3f-1f2d235f8627"
+
+# KV Namespace binding
+# TODO: Run `wrangler kv:namespace create JIROMAP_KV` and replace id below
+[[kv_namespaces]]
+binding = "JIROMAP_KV"
+id = "6c77505c53334764b12aeb5bafa3d991"

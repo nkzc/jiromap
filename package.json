@@ -1,0 +1,38 @@
+{
+  "name": "jiro",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "test": "npx vitest run tests/unit/ --coverage",
+    "test:unit": "npx vitest run tests/unit/",
+    "test:integration": "npx vitest run --config vitest.integration.config.ts",
+    "wrangler:dev": "wrangler pages dev .svelte-kit/cloudflare --port 8787",
+    "deploy": "npm run build && wrangler pages deploy .svelte-kit/cloudflare",
+    "deploy:cron": "wrangler deploy --config wrangler.cron.toml"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260502.1",
+    "@sveltejs/adapter-cloudflare": "^7.2.8",
+    "@sveltejs/kit": "^2.59.0",
+    "@sveltejs/vite-plugin-svelte": "^7.0.0",
+    "@types/leaflet": "^1.9.21",
+    "@vitest/coverage-v8": "^4.1.5",
+    "svelte": "^5.55.5",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.10",
+    "vitest": "^4.1.5"
+  },
+  "dependencies": {
+    "leaflet": "^1.9.4"
+  }
+}

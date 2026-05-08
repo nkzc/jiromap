@@ -1,0 +1,11 @@
+# すべてのテキストファイルは LF で統一（Windows の CRLF に自動変換しない）
+* text=auto eol=lf
+
+# バイナリファイルは変換しない
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+*.sqlite binary
+*.sqlite-shm binary
+*.sqlite-wal binary

@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($env:PATH = \"C:\\\\nodejs22\\\\node-v22.15.0-win-x64;$env:PATH\"; Set-Location \"C:\\\\Users\\\\kn\\\\Documents\\\\jiro\"; npm run build 2>&1 | Select-String -Pattern \"error|Error|DONE|built in|adapter\" | Select-Object -First 20)",
+      "PowerShell($env:PATH = \"C:\\\\nodejs22\\\\node-v22.15.0-win-x64;$env:PATH\"; Set-Location \"C:\\\\Users\\\\kn\\\\Documents\\\\jiro\"; $job = Start-Job -ScriptBlock { $env:PATH = \"C:\\\\nodejs22\\\\node-v22.15.0-win-x64;$env:PATH\"; Set-Location \"C:\\\\Users\\\\kn\\\\Documents\\\\jiro\"; npx wrangler pages dev .svelte-kit/cloudflare --port 8787 2>&1 }; Start-Sleep -Seconds 10; Receive-Job $job -Keep | Select-Object -Last 30)",
+      "PowerShell(Start-Sleep -Seconds 12; $env:PATH = \"C:\\\\nodejs22\\\\node-v22.15.0-win-x64;$env:PATH\"; Invoke-WebRequest -Uri \"http://localhost:8787/api/shops?lat=35.6585&lng=139.7454&radius=3000\" -UseBasicParsing -TimeoutSec 10 2>&1 | Select-Object -ExpandProperty Content)",
+      "PowerShell($env:PATH = \"C:\\\\nodejs22\\\\node-v22.15.0-win-x64;$env:PATH\"; Set-Location \"C:\\\\Users\\\\kn\\\\Documents\\\\jiro\"; $proc = Start-Process -FilePath \"C:\\\\nodejs22\\\\node-v22.15.0-win-x64\\\\node.exe\" -ArgumentList \"C:\\\\nodejs22\\\\node-v22.15.0-win-x64\\\\node_modules\\\\npm\\\\bin\\\\npx-cli.js\",\"wrangler\",\"pages\",\"dev\",\".svelte-kit/cloudflare\",\"--port\",\"8787\" -PassThru -WindowStyle Hidden; Start-Sleep -Seconds 8; $proc.Id)",
+      "PowerShell(Start-Sleep -Seconds 5; try { $r = Invoke-WebRequest -Uri \"http://localhost:8787/api/shops?lat=35.6585&lng=139.7454&radius=3000\" -UseBasicParsing -TimeoutSec 10; $r.Content } catch { \"Error: $_\" })",
+      "PowerShell($r = Invoke-WebRequest -Uri \"http://localhost:8787/api/shops?lat=35.6585&lng=139.7454&radius=3000\" -UseBasicParsing -TimeoutSec 10; $json = $r.Content | ConvertFrom-Json; $json.shops | Select-Object id, name, distance_m; \"Total: \" + $json.meta.total)",
+      "PowerShell($r = Invoke-WebRequest -Uri \"http://localhost:8787/api/shops?lat=35.6585&lng=139.7454&radius=5000\" -UseBasicParsing -TimeoutSec 10; Write-Host $r.Content)",
+      "PowerShell($env:PATH = \"C:\\\\nodejs22\\\\node-v22.15.0-win-x64;$env:PATH\"; Set-Location \"C:\\\\Users\\\\kn\\\\Documents\\\\jiro\"; npx vitest run tests/unit/ --coverage 2>&1)"
+    ]
+  }
+}

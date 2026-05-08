@@ -1,0 +1,15 @@
+name = "jiromap-cron"
+main = "cron-worker.ts"
+compatibility_date = "2024-09-23"
+
+[triggers]
+crons = ["*/1 * * * *"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "jiromap"
+database_id = "5c2500bc-4980-4db5-ae3f-1f2d235f8627"
+
+[[kv_namespaces]]
+binding = "JIROMAP_KV"
+id = "6c77505c53334764b12aeb5bafa3d991"

@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ja">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!-- DNS プリフェッチ + プリコネクト (LCP 改善) -->
+		<link rel="preconnect" href="https://unpkg.com" />
+		<link rel="preconnect" href="https://tile.openstreetmap.org" />
+		<link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+		<!-- Leaflet CSS を preload (LCP に影響するため) -->
+		<link rel="preload" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" as="style" />
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+		%sveltekit.head%
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">%sveltekit.body%</div>
+	</body>
+</html>
