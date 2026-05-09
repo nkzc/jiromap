@@ -41,6 +41,7 @@ jiro/
 │   │   ├── hash.ts                 # IP ハッシュ化（Web Crypto API）
 │   │   ├── wait-level.ts           # 混雑レベルラベル定義
 │   │   ├── colors.ts               # 混雑レベル色定義（0=緑〜4=赤〜null=灰）
+│   │   ├── shop-hours.ts           # 営業時間・定休日解析（isShopLikelyOpen）
 │   │   ├── error.ts                # 統一エラーレスポンス生成
 │   │   ├── seo.ts                  # JSON-LD 構造化データ生成
 │   │   ├── affiliate.ts            # アフィリエイト URL ユーティリティ
@@ -88,7 +89,7 @@ jiro/
 │   └── 0003_shop_rules.sql         # shops テーブルにルール列追加（queue_notes, topping_notes, shop_notes）
 │
 ├── tests/
-│   ├── unit/                       # ユニットテスト（99 件・D1/KV はモック）
+│   ├── unit/                       # ユニットテスト（117 件・D1/KV はモック）
 │   └── integration/                # 統合テスト（18 件・本番 URL に実際に fetch）
 │
 ├── cron-worker.ts                  # Cron バッチ Worker 本体

@@ -2,7 +2,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import type { Map as LeafletMap, Marker } from 'leaflet';
 	import type { Shop } from '../types.js';
-	import { getWaitLevelColor } from '../colors.js';
+	import { isShopLikelyOpen } from '../shop-hours.js';
 
 	export let shops: Shop[] = [];
 	export let centerLat: number = 35.6585;
@@ -55,7 +55,7 @@
 		if (!map) return;
 		clearMarkers();
 		for (const shop of shopList) {
-			const color = getWaitLevelColor(shop.status?.current_wait_level);
+			const color = isShopLikelyOpen(shop) ? '#dc2626' : '#64748b';
 			const icon = createPinIcon(leaflet, color);
 			const marker = leaflet
 				.marker([shop.lat, shop.lng], { icon })

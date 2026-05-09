@@ -115,7 +115,7 @@ wrangler d1 execute jiromap --remote --file=migrations/000X_xxxx.sql
 ```
 src/            # ソースコード（詳細は docs/architecture.md）
 tests/
-  unit/         # ユニットテスト（99 件）
+  unit/         # ユニットテスト（117 件）
   integration/  # 統合テスト（18 件）
 migrations/     # D1 マイグレーションファイル
 docs/           # ドキュメント
