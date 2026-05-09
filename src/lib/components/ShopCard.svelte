@@ -21,7 +21,6 @@
 	}
 
 	$: status = shop.status;
-	$: hasRules = !!(shop.queue_notes || shop.topping_notes || shop.shop_notes);
 	$: reportedAt = status?.last_reported_at ? formatRelativeTime(status.last_reported_at) : '';
 	$: confidenceLabel =
 		status?.confidence != null
@@ -61,11 +60,6 @@
 	<div class="card-actions">
 		<div class="secondary-actions">
 			<button class="btn btn-secondary" on:click={() => openRoute(shop)}>ルートを見る</button>
-			{#if hasRules}
-				<a class="btn btn-secondary" href="/shops/{shop.id}">頼み方</a>
-			{:else}
-				<button class="btn btn-secondary btn-disabled" disabled>頼み方</button>
-			{/if}
 		</div>
 	</div>
 </div>
@@ -154,8 +148,5 @@
 		flex: 1;
 	}
 
-	.btn-disabled {
-		opacity: 0.35;
-		cursor: not-allowed;
-	}
+
 </style>
