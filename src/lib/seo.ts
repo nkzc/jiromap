@@ -44,7 +44,7 @@ export function buildWebsiteJsonLd(): string {
 		'@type': 'WebSite',
 		name: '二郎マップ',
 		url: 'https://jiromap.pages.dev/',
-		description: '二郎系ラーメン混雑状況マップ',
+		description: 'ラーメン二郎の店舗を地図で探せるサービス',
 		potentialAction: {
 			'@type': 'SearchAction',
 			target: {

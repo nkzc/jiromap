@@ -107,10 +107,10 @@
 </script>
 
 <svelte:head>
-	<title>二郎マップ — 周辺の二郎系ラーメン混雑状況をリアルタイム確認</title>
-	<meta name="description" content="現在地周辺の二郎系・インスパイア系ラーメン店の並び・混雑状況をリアルタイムで確認。今すぐ食べに行けるか一目でわかる。" />
-	<meta property="og:title" content="二郎マップ — 二郎系ラーメン混雑マップ" />
-	<meta property="og:description" content="周辺の二郎系ラーメン店の今の混雑状況がわかるマップサービス" />
+	<title>二郎マップ — 現在地周辺のラーメン二郎を地図で探す</title>
+	<meta name="description" content="現在地周辺のラーメン二郎の店舗を地図で探せます。営業時間・アクセス・頼み方ガイドも確認できます。" />
+	<meta property="og:title" content="二郎マップ — 現在地から二郎を探す" />
+	<meta property="og:description" content="ラーメン二郎の店舗を地図で探せるサービス。現在地から近い順に表示。" />
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content="https://jiromap.pages.dev/" />
 	<meta property="og:image" content="https://jiromap.pages.dev/ogp.png" />

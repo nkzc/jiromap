@@ -44,10 +44,10 @@
 </script>
 
 <svelte:head>
-	<title>二郎系ラーメン店舗一覧 | 二郎マップ</title>
-	<meta name="description" content="東京近郊の二郎系・インスパイア系ラーメン店一覧。現在地から近い順に表示。" />
-	<meta property="og:title" content="二郎マップ — 二郎系ラーメン混雑マップ" />
-	<meta property="og:description" content="周辺の二郎系ラーメン店の今の混雑状況がわかるマップサービス" />
+	<title>二郎店舗一覧 | 二郎マップ</title>
+	<meta name="description" content="現在地周辺のラーメン二郎の店舗を一覧で確認。近い順に表示。" />
+	<meta property="og:title" content="二郎マップ — 現在地から二郎を探す" />
+	<meta property="og:description" content="ラーメン二郎の店舗を地図で探せるサービス。" />
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content="https://jiromap.pages.dev/shops" />
 	<meta property="og:image" content="https://jiromap.pages.dev/ogp.png" />
@@ -56,7 +56,7 @@
 
 <div class="shops-page">
 	<div class="page-header">
-		<h1 class="page-title">周辺の二郎系</h1>
+		<h1 class="page-title">周辺の二郎</h1>
 		<span class="radius-badge">{$radiusKm}km圏内</span>
 		{#if !loading}
 			<span class="shop-count">{shops.length}件</span>
