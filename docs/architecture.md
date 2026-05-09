@@ -33,7 +33,8 @@ jiro/
 │   ├── hooks.server.ts             # バッチ集計ロジック（cron-worker.ts と共有）
 │   │
 │   ├── lib/
-│   │   ├── config.ts               # アプリ設定定数（NEARBY_RADIUS_M=5000 等）
+│   │   ├── config.ts               # アプリ設定定数（RADIUS_MIN_KM=5, RADIUS_MAX_KM=50, RADIUS_STEP_KM=5, RADIUS_DEFAULT_KM=20 等）
+│   │   ├── stores.ts               # Svelte writable store（radiusKm: 初期値 20）
 │   │   ├── types.ts                # 共有型定義（Shop, ShopStatus, Report）
 │   │   ├── api.ts                  # フロントエンド向け API クライアント
 │   │   ├── haversine.ts            # 距離計算（ハバーサイン公式）
@@ -57,9 +58,9 @@ jiro/
 │   │
 │   └── routes/
 │       ├── +layout.svelte          # グローバルナビ・AdSense スクリプト・canonical
-│       ├── +page.svelte            # トップページ（地図 + 30秒ポーリング）
+│       ├── +page.svelte            # トップページ（地図 + 30秒ポーリング + 検索範囲スライダー）
 │       ├── shops/
-│       │   ├── +page.svelte        # 店舗一覧（距離順・AdSense 5件ごと）
+│       │   ├── +page.svelte        # 店舗一覧（距離順・AdSense 5件ごと・現在の範囲km表示）
 │       │   └── [id]/
 │       │       ├── +page.svelte    # 店舗詳細（JSON-LD・投稿フォーム・外部リンク）
 │       │       └── +page.ts        # SSR データ取得（shop + recentReports）

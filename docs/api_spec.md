@@ -43,7 +43,7 @@
 |---|---|---|---|---|---|
 | `lat` | `number` | 必須 | — | `-90.0` 〜 `90.0` | 中心点の緯度 |
 | `lng` | `number` | 必須 | — | `-180.0` 〜 `180.0` | 中心点の経度 |
-| `radius` | `number` | 任意 | `5000` | `100` 〜 `20000`（メートル） | 検索半径（m） |
+| `radius` | `number` | 任意 | `20000` | `100` 〜 `50000`（メートル） | 検索半径（m） |
 | `category` | `string` | 任意 | — | `"jiro"` または `"inspired"` | カテゴリフィルタ |
 | `limit` | `number` | 任意 | `50` | `1` 〜 `100` | 最大取得件数 |
 
@@ -136,7 +136,7 @@ GET /api/shops?lat=35.6585&lng=139.7454&radius=3000&limit=20
 {
   "error": {
     "code": "INVALID_PARAM_VALUE",
-    "message": "radius は 100 以上 20000 以下で指定してください",
+    "message": "radius は 100 以上 50000 以下で指定してください",
     "status": 400,
     "field": "radius"
   }

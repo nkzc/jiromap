@@ -5,7 +5,8 @@
 	import ReportForm from '$lib/components/ReportForm.svelte';
 	import { fetchNearbyShops } from '$lib/api.js';
 	import { MOCK_SHOPS } from '$lib/mock-data.js';
-	import { NEARBY_RADIUS_M } from '$lib/config.js';
+	import { radiusKm } from '$lib/stores.js';
+	import { RADIUS_MIN_KM, RADIUS_MAX_KM, RADIUS_STEP_KM } from '$lib/config.js';
 	import type { Shop } from '$lib/types.js';
 	import { buildWebsiteJsonLd } from '$lib/seo.js';
 
@@ -24,13 +25,14 @@
 	let loading = false;
 	let error = '';
 	let pollTimer: ReturnType<typeof setInterval>;
+	let radiusDebounceTimer: ReturnType<typeof setTimeout>;
 	let mapComponent: Map;
 
 	async function loadShops(lat: number, lng: number) {
 		loading = true;
 		error = '';
 		try {
-			shops = await fetchNearbyShops(lat, lng, NEARBY_RADIUS_M);
+			shops = await fetchNearbyShops(lat, lng, $radiusKm * 1000);
 		} catch {
 			// API unavailable (e.g. Vite dev mode) – fall back to mock data
 			shops = MOCK_SHOPS;
@@ -103,8 +105,18 @@
 		pollTimer = setInterval(() => loadShops(currentLat, currentLng), POLL_INTERVAL);
 	});
 
+	function onRadiusChange() {
+		clearTimeout(radiusDebounceTimer);
+		radiusDebounceTimer = setTimeout(() => {
+			clearInterval(pollTimer);
+			loadShops(currentLat, currentLng);
+			pollTimer = setInterval(() => loadShops(currentLat, currentLng), POLL_INTERVAL);
+		}, 300);
+	}
+
 	onDestroy(() => {
 		clearInterval(pollTimer);
+		clearTimeout(radiusDebounceTimer);
 	});
 </script>
 
@@ -131,6 +143,21 @@
 			{userLng}
 			onShopClick={handleShopClick}
 		/>
+
+		<!-- Radius control -->
+		<div class="radius-control">
+			<input
+				type="range"
+				min={RADIUS_MIN_KM}
+				max={RADIUS_MAX_KM}
+				step={RADIUS_STEP_KM}
+				bind:value={$radiusKm}
+				on:input={onRadiusChange}
+				class="radius-slider"
+				aria-label="検索範囲"
+			/>
+			<span class="radius-value">{$radiusKm}km</span>
+		</div>
 
 		<!-- Locate button -->
 		<button class="locate-btn" on:click={locateUser} aria-label="現在地に移動">
@@ -259,5 +286,38 @@
 			max-height: calc(100% - 32px);
 			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 		}
+	}
+
+	.radius-control {
+		position: absolute;
+		bottom: 10px;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 55%;
+		z-index: 800;
+		background: #fff;
+		border: 2px solid rgba(0, 0, 0, 0.2);
+		border-radius: 8px;
+		padding: 6px 10px;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.radius-slider {
+		flex: 1;
+		accent-color: #2563eb;
+		cursor: pointer;
+		min-width: 0;
+	}
+
+	.radius-value {
+		font-size: 13px;
+		font-weight: 600;
+		color: #374151;
+		white-space: nowrap;
+		min-width: 36px;
+		text-align: right;
+		user-select: none;
 	}
 </style>

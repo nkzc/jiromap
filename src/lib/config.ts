@@ -1,1 +1,4 @@
-export const NEARBY_RADIUS_M = 5000; // マップ・一覧ページ共通の検索半径（m）
+export const RADIUS_MIN_KM = 5;
+export const RADIUS_MAX_KM = 50;
+export const RADIUS_STEP_KM = 5;
+export const RADIUS_DEFAULT_KM = 20;

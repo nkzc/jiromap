@@ -4,7 +4,7 @@
 	import AdBanner from '$lib/components/AdBanner.svelte';
 	import { fetchNearbyShops } from '$lib/api.js';
 	import { MOCK_SHOPS } from '$lib/mock-data.js';
-	import { NEARBY_RADIUS_M } from '$lib/config.js';
+	import { radiusKm } from '$lib/stores.js';
 	import type { Shop } from '$lib/types.js';
 
 	const TOKYO_CENTER = { lat: 35.6585, lng: 139.7454 };
@@ -22,7 +22,7 @@
 		loading = true;
 		error = '';
 		try {
-			shops = await fetchNearbyShops(lat, lng, NEARBY_RADIUS_M);
+			shops = await fetchNearbyShops(lat, lng, $radiusKm * 1000);
 		} catch {
 			shops = MOCK_SHOPS;
 		} finally {
@@ -57,6 +57,7 @@
 <div class="shops-page">
 	<div class="page-header">
 		<h1 class="page-title">周辺の二郎系</h1>
+		<span class="radius-badge">{$radiusKm}km圏内</span>
 		{#if !loading}
 			<span class="shop-count">{shops.length}件</span>
 		{/if}
@@ -131,6 +132,15 @@
 	.shop-count {
 		font-size: 14px;
 		color: var(--color-muted, #6b7280);
+	}
+
+	.radius-badge {
+		font-size: 12px;
+		color: #2563eb;
+		background: #eff6ff;
+		border-radius: 999px;
+		padding: 2px 8px;
+		white-space: nowrap;
 	}
 
 	.loading,

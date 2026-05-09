@@ -4,7 +4,7 @@ import { getWaitLevelLabel } from '$lib/wait-level';
 import { errorResponse } from '$lib/error';
 
 const DEFAULT_RADIUS_M = 3000;
-const MAX_RADIUS_M = 10000;
+const MAX_RADIUS_M = 50000;
 const MIN_RADIUS_M = 100;
 
 interface ShopRow {
