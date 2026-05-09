@@ -191,6 +191,7 @@
 	.page {
 		position: relative;
 		height: calc(100vh - var(--header-height, 52px));
+		height: calc(100dvh - var(--header-height, 52px));
 		display: flex;
 		flex-direction: column;
 	}
@@ -202,7 +203,7 @@
 
 	.locate-btn {
 		position: absolute;
-		bottom: 80px;
+		bottom: calc(80px + env(safe-area-inset-bottom, 0px));
 		right: 10px;
 		z-index: 800;
 		background: #fff;
@@ -284,7 +285,7 @@
 
 	.radius-control {
 		position: absolute;
-		bottom: 10px;
+		bottom: calc(10px + env(safe-area-inset-bottom, 0px));
 		left: 50%;
 		transform: translateX(-50%);
 		width: 55%;
