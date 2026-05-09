@@ -48,8 +48,3 @@ export interface ApiError {
 	retry_after?: number;
 }
 
-export interface PostReportResult {
-	ok: boolean;
-	status: number;
-	data: unknown;
-}

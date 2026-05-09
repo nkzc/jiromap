@@ -3,8 +3,7 @@ import {
 	fetchNearbyShops,
 	fetchShopDetail,
 	fetchShopStatus,
-	fetchShopReports,
-	postReport
+	fetchShopReports
 } from '../../src/lib/api.js';
 
 const mockShop = {
@@ -135,49 +134,5 @@ describe('fetchShopReports', () => {
 	it('throws on non-ok response', async () => {
 		global.fetch = mockFetch({ error: 'not found' }, 404) as unknown as typeof fetch;
 		await expect(fetchShopReports(999)).rejects.toThrow('API error: 404');
-	});
-});
-
-describe('postReport', () => {
-	afterEach(() => {
-		vi.restoreAllMocks();
-	});
-
-	it('posts to correct URL with JSON body', async () => {
-		global.fetch = mockFetch({ id: 1 }, 201) as unknown as typeof fetch;
-		await postReport(1, 2, 'test comment');
-		expect(global.fetch).toHaveBeenCalledWith('/api/shops/1/reports', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ wait_level: 2, comment: 'test comment' })
-		});
-	});
-
-	it('returns ok:true on 201', async () => {
-		global.fetch = mockFetch({ id: 1 }, 201) as unknown as typeof fetch;
-		const result = await postReport(1, 0);
-		expect(result.ok).toBe(true);
-		expect(result.status).toBe(201);
-	});
-
-	it('returns ok:false on 429', async () => {
-		global.fetch = mockFetch({ error: 'RATE_LIMIT_EXCEEDED', retry_after: 60 }, 429) as unknown as typeof fetch;
-		const result = await postReport(1, 2);
-		expect(result.ok).toBe(false);
-		expect(result.status).toBe(429);
-	});
-
-	it('returns ok:false on 400', async () => {
-		global.fetch = mockFetch({ error: 'INVALID_WAIT_LEVEL' }, 400) as unknown as typeof fetch;
-		const result = await postReport(1, 99);
-		expect(result.ok).toBe(false);
-	});
-
-	it('omits comment when not provided', async () => {
-		global.fetch = mockFetch({ id: 1 }, 201) as unknown as typeof fetch;
-		await postReport(1, 0);
-		const call = (global.fetch as ReturnType<typeof vi.fn>).mock.calls[0];
-		const body = JSON.parse(call[1].body);
-		expect(body.comment).toBeUndefined();
 	});
 });
