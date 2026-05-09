@@ -2,7 +2,6 @@
 	import { onMount, onDestroy } from 'svelte';
 	import Map from '$lib/components/Map.svelte';
 	import ShopCard from '$lib/components/ShopCard.svelte';
-	import ReportForm from '$lib/components/ReportForm.svelte';
 	import { fetchNearbyShops } from '$lib/api.js';
 	import { MOCK_SHOPS } from '$lib/mock-data.js';
 	import { radiusKm } from '$lib/stores.js';
@@ -21,7 +20,6 @@
 	let userLat: number | null = null;
 	let userLng: number | null = null;
 	let selectedShop: Shop | null = null;
-	let showReport = false;
 	let loading = false;
 	let error = '';
 	let pollTimer: ReturnType<typeof setInterval>;
@@ -43,22 +41,10 @@
 
 	function handleShopClick(shop: Shop) {
 		selectedShop = shop;
-		showReport = false;
-	}
-
-	function handleReport(shop: Shop) {
-		selectedShop = shop;
-		showReport = true;
-	}
-
-	function handleReportSuccess() {
-		// Reload shops after successful report
-		loadShops(currentLat, currentLng);
 	}
 
 	function closePanel() {
 		selectedShop = null;
-		showReport = false;
 	}
 
 	function locateUser() {
@@ -175,20 +161,8 @@
 	<!-- Shop popup panel -->
 	{#if selectedShop}
 		<div class="side-panel">
-			{#if showReport}
-				<ReportForm
-					shopId={selectedShop.id}
-					shopName={selectedShop.name}
-					onClose={closePanel}
-					onSuccess={handleReportSuccess}
-				/>
-			{:else}
-				<ShopCard
-					shop={selectedShop}
-					onReport={handleReport}
-				/>
-				<button class="panel-close" on:click={closePanel} aria-label="閉じる">&times;</button>
-			{/if}
+			<ShopCard shop={selectedShop} />
+			<button class="panel-close" on:click={closePanel} aria-label="閉じる">&times;</button>
 		</div>
 	{/if}
 </div>

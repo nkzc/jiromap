@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import WaitLevelBadge from '$lib/components/WaitLevelBadge.svelte';
-	import ReportForm from '$lib/components/ReportForm.svelte';
 	import AdBanner from '$lib/components/AdBanner.svelte';
 	import { WAIT_LEVEL_LABELS } from '$lib/wait-level.js';
 	import { buildRestaurantJsonLd } from '$lib/seo.js';
@@ -12,8 +11,6 @@
 
 	$: shop = data.shop;
 	$: recentReports = (data.recentReports as Report[]) ?? [];
-
-	let showReport = false;
 
 	function formatRelativeTime(isoString: string | null): string {
 		if (!isoString) return '';
@@ -156,20 +153,6 @@
 				<p class="rules-note">※ 参考情報です。実際のルールは店舗にてご確認ください。</p>
 			</section>
 		{/if}
-
-		<!-- Report button -->
-		<section class="card">
-			{#if !showReport}
-				<button class="report-btn" on:click={() => (showReport = true)}>並びを報告する</button>
-			{:else}
-				<ReportForm
-					shopId={shop.id}
-					shopName={shop.name}
-					onClose={() => (showReport = false)}
-					onSuccess={() => (showReport = false)}
-				/>
-			{/if}
-		</section>
 
 		<!-- Recent reports -->
 		{#if recentReports.length > 0}
@@ -315,23 +298,6 @@
 		margin: 0;
 		color: var(--color-text, #1f2937);
 		flex: 1;
-	}
-
-	.report-btn {
-		width: 100%;
-		min-height: 44px;
-		background: var(--color-primary, #dc2626);
-		color: #fff;
-		border: none;
-		border-radius: 8px;
-		font-size: 15px;
-		font-weight: 600;
-		cursor: pointer;
-		transition: opacity 0.15s;
-	}
-
-	.report-btn:hover {
-		opacity: 0.9;
 	}
 
 	.section-title {

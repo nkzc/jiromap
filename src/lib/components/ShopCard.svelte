@@ -3,7 +3,6 @@
 	import WaitLevelBadge from './WaitLevelBadge.svelte';
 
 	export let shop: Shop;
-	export let onReport: (shop: Shop) => void = () => {};
 
 	function formatRelativeTime(isoString: string | null): string {
 		if (!isoString) return '';
@@ -60,7 +59,6 @@
 	{/if}
 
 	<div class="card-actions">
-		<button class="btn btn-primary" on:click={() => onReport(shop)}>並びを報告する</button>
 		<div class="secondary-actions">
 			<button class="btn btn-secondary" on:click={() => openRoute(shop)}>ルートを見る</button>
 			{#if hasRules}
@@ -148,12 +146,6 @@
 
 	.btn:hover {
 		opacity: 0.85;
-	}
-
-	.btn-primary {
-		background: var(--color-primary, #dc2626);
-		color: #fff;
-		width: 100%;
 	}
 
 	.btn-secondary {
