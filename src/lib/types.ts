@@ -19,6 +19,9 @@ export interface Shop {
 	category: 'jiro' | 'inspired';
 	business_hours: string | null;
 	closed_days: string | null;
+	queue_notes: string | null;
+	topping_notes: string | null;
+	shop_notes: string | null;
 	distance_m: number;
 	status: ShopStatus | null;
 }

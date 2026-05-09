@@ -13,6 +13,9 @@ interface ShopRow {
 	business_hours: string | null;
 	closed_days: string | null;
 	category: string;
+	queue_notes: string | null;
+	topping_notes: string | null;
+	shop_notes: string | null;
 	tabelog_url: string | null;
 	gurunavi_url: string | null;
 	twitter_handle: string | null;
@@ -75,6 +78,9 @@ export const GET: RequestHandler = async ({ params, platform }) => {
 			phone: row.phone,
 			business_hours: row.business_hours,
 			closed_days: row.closed_days,
+			queue_notes: row.queue_notes,
+			topping_notes: row.topping_notes,
+			shop_notes: row.shop_notes,
 			category: row.category,
 			tabelog_url: row.tabelog_url,
 			gurunavi_url: row.gurunavi_url,

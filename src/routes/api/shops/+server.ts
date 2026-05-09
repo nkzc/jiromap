@@ -17,6 +17,9 @@ interface ShopRow {
 	business_hours: string | null;
 	closed_days: string | null;
 	category: string;
+	queue_notes: string | null;
+	topping_notes: string | null;
+	shop_notes: string | null;
 	// shop_statuses fields (LEFT JOIN)
 	current_wait_level: number | null;
 	report_count: number | null;
@@ -67,6 +70,7 @@ export const GET: RequestHandler = async ({ url, platform }) => {
 		const rows = await platform.env.DB.prepare(
 			`SELECT s.id, s.name, s.lat, s.lng, s.address, s.nearest_station,
               s.business_hours, s.closed_days, s.category,
+              s.queue_notes, s.topping_notes, s.shop_notes,
               ss.current_wait_level, ss.report_count, ss.confidence,
               ss.last_reported_at, ss.aggregated_at
        FROM shops s
@@ -107,6 +111,9 @@ export const GET: RequestHandler = async ({ url, platform }) => {
 					category: row.category,
 					business_hours: row.business_hours,
 					closed_days: row.closed_days,
+					queue_notes: row.queue_notes,
+					topping_notes: row.topping_notes,
+					shop_notes: row.shop_notes,
 					distance_m: distanceM,
 					status
 				};

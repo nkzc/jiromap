@@ -47,10 +47,15 @@ jiro/
 │   │   ├── spam-check.ts           # スパムチェック（KV + D1 フォールバック）
 │   │   ├── mock-data.ts            # 開発用モックデータ
 │   │   │
+│   │   ├── content/
+│   │   │   └── jiro-guide.ts       # 頼み方ガイド本文（GuideSection[] + GUIDE_VERSION）
+│   │   │
 │   │   └── components/
 │   │       ├── Map.svelte          # Leaflet 地図（SSR 非対応, onMount で動的 import）
 │       │                       #   props: userLat/userLng — 現在地ピン（青ドット）表示
 │   │       ├── ShopCard.svelte     # 店舗カード（地図のポップアップ）
+│       │                       #   「ルートを見る」= Google Maps directions 外部リンク
+│       │                       #   「頼み方」= /shops/{id} への内部リンク（ルール情報がある店舗のみ有効。ない場合は disabled）
 │   │       ├── ReportForm.svelte   # 混雑投稿フォーム
 │   │       ├── WaitLevelBadge.svelte # 混雑レベルバッジ
 │   │       ├── AdBanner.svelte     # 広告（dev=プレースホルダー, 本番=AdSense）
@@ -62,8 +67,9 @@ jiro/
 │       ├── shops/
 │       │   ├── +page.svelte        # 店舗一覧（距離順・AdSense 5件ごと・現在の範囲km表示）
 │       │   └── [id]/
-│       │       ├── +page.svelte    # 店舗詳細（JSON-LD・投稿フォーム・外部リンク）
+│       │       ├── +page.svelte    # 店舗詳細（JSON-LD・投稿フォーム・外部リンク・「この店のルール」セクション）
 │       │       └── +page.ts        # SSR データ取得（shop + recentReports）
+│       ├── guide/+page.svelte      # 頼み方ガイド（5セクション・免責事項付き）
 │       ├── privacy/+page.svelte    # プライバシーポリシー
 │       ├── terms/+page.svelte      # 利用規約
 │       ├── sitemap.xml/+server.ts  # 動的 sitemap 生成
@@ -78,7 +84,8 @@ jiro/
 │
 ├── migrations/
 │   ├── 0001_initial.sql            # テーブル定義（4テーブル）
-│   └── 0002_seed.sql               # 初期 8 店舗データ
+│   ├── 0002_seed.sql               # 初期 8 店舗データ
+│   └── 0003_shop_rules.sql         # shops テーブルにルール列追加（queue_notes, topping_notes, shop_notes）
 │
 ├── tests/
 │   ├── unit/                       # ユニットテスト（99 件・D1/KV はモック）

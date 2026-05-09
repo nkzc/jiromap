@@ -67,6 +67,18 @@ CREATE TABLE shops (
     -- 公式X（Twitter）アカウント（例: "@jiro_mita"。任意）
     twitter_handle TEXT,
 
+    -- 並び方・注文ルールに関するメモ（例: "食券制・券売機は入口右"。任意）
+    -- 0003_shop_rules.sql で追加
+    queue_notes TEXT,
+
+    -- トッピング・コールに関するメモ（例: "ニンニク・ヤサイ・アブラ・カラメが選べます"。任意）
+    -- 0003_shop_rules.sql で追加
+    topping_notes TEXT,
+
+    -- その他店舗固有ルール（例: "食べ残し厳禁・スマホ禁止"。任意）
+    -- 0003_shop_rules.sql で追加
+    shop_notes TEXT,
+
     -- レコード作成日時（ISO8601）
     created_at  TEXT    NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
 
@@ -260,6 +272,9 @@ erDiagram
         TEXT tabelog_url
         TEXT gurunavi_url
         TEXT twitter_handle
+        TEXT queue_notes
+        TEXT topping_notes
+        TEXT shop_notes
         TEXT created_at
         TEXT updated_at
     }

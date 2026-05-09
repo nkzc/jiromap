@@ -16,12 +16,13 @@
 		return `${Math.floor(hours / 24)}日前`;
 	}
 
-	function openInMaps(shop: Shop) {
-		const url = `https://www.google.com/maps/search/?api=1&query=${shop.lat},${shop.lng}`;
+	function openRoute(shop: Shop) {
+		const url = `https://www.google.com/maps/dir/?api=1&destination=${shop.lat},${shop.lng}&travelmode=transit`;
 		window.open(url, '_blank', 'noopener');
 	}
 
 	$: status = shop.status;
+	$: hasRules = !!(shop.queue_notes || shop.topping_notes || shop.shop_notes);
 	$: reportedAt = status?.last_reported_at ? formatRelativeTime(status.last_reported_at) : '';
 	$: confidenceLabel =
 		status?.confidence != null
@@ -61,8 +62,12 @@
 	<div class="card-actions">
 		<button class="btn btn-primary" on:click={() => onReport(shop)}>並びを報告する</button>
 		<div class="secondary-actions">
-			<button class="btn btn-secondary" on:click={() => openInMaps(shop)}>地図で開く</button>
-			<a class="btn btn-secondary" href="/shops/{shop.id}">詳細</a>
+			<button class="btn btn-secondary" on:click={() => openRoute(shop)}>ルートを見る</button>
+			{#if hasRules}
+				<a class="btn btn-secondary" href="/shops/{shop.id}">頼み方</a>
+			{:else}
+				<button class="btn btn-secondary btn-disabled" disabled>頼み方</button>
+			{/if}
 		</div>
 	</div>
 </div>
@@ -155,5 +160,10 @@
 		background: #f3f4f6;
 		color: var(--color-text, #1f2937);
 		flex: 1;
+	}
+
+	.btn-disabled {
+		opacity: 0.35;
+		cursor: not-allowed;
 	}
 </style>

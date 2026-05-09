@@ -68,6 +68,9 @@ GET /api/shops?lat=35.6585&lng=139.7454&radius=3000&limit=20
       "category": "jiro",
       "business_hours": "11:00-14:00, 17:00-20:00",
       "closed_days": "月曜日・祝日",
+      "queue_notes": "食券制・券売機は入口右",
+      "topping_notes": "ニンニク・ヤサイ・アブラ・カラメが選べます",
+      "shop_notes": null,
       "distance_m": 1423,
       "status": {
         "current_wait_level": 2,
@@ -88,6 +91,9 @@ GET /api/shops?lat=35.6585&lng=139.7454&radius=3000&limit=20
       "category": "jiro",
       "business_hours": "11:00-15:00",
       "closed_days": "日曜日・祝日",
+      "queue_notes": null,
+      "topping_notes": null,
+      "shop_notes": null,
       "distance_m": 2187,
       "status": {
         "current_wait_level": null,
@@ -189,6 +195,9 @@ GET /api/shops/1
     "tabelog_url": "https://tabelog.com/tokyo/A1307/A130703/13004780/",
     "gurunavi_url": null,
     "twitter_handle": null,
+    "queue_notes": "食券制・券売機は入口右",
+    "topping_notes": "ニンニク・ヤサイ・アブラ・カラメが選べます",
+    "shop_notes": null,
     "created_at": "2026-05-01T00:00:00.000Z",
     "updated_at": "2026-05-01T00:00:00.000Z"
   }

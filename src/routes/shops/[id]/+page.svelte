@@ -129,6 +129,34 @@
 			</dl>
 		</section>
 
+		<!-- Rules -->
+		{#if shop.queue_notes || shop.topping_notes || shop.shop_notes}
+			<section class="card rules-card">
+				<h2 class="section-title">この店のルール</h2>
+				<dl class="info-list">
+					{#if shop.queue_notes}
+						<div class="info-row">
+							<dt>並び方</dt>
+							<dd>{shop.queue_notes}</dd>
+						</div>
+					{/if}
+					{#if shop.topping_notes}
+						<div class="info-row">
+							<dt>トッピング</dt>
+							<dd>{shop.topping_notes}</dd>
+						</div>
+					{/if}
+					{#if shop.shop_notes}
+						<div class="info-row">
+							<dt>その他</dt>
+							<dd>{shop.shop_notes}</dd>
+						</div>
+					{/if}
+				</dl>
+				<p class="rules-note">※ 参考情報です。実際のルールは店舗にてご確認ください。</p>
+			</section>
+		{/if}
+
 		<!-- Report button -->
 		<section class="card">
 			{#if !showReport}
@@ -398,6 +426,12 @@
 	.ext-link.maps {
 		background: #3b82f6;
 		color: #fff;
+	}
+
+	.rules-note {
+		font-size: 11px;
+		color: var(--color-muted, #6b7280);
+		margin: 8px 0 0;
 	}
 
 	@media (min-width: 768px) {
