@@ -61,7 +61,7 @@
 				() => {
 					loadShops(TOKYO_CENTER.lat, TOKYO_CENTER.lng);
 				},
-				{ timeout: 5000 }
+				{ timeout: 10000, maximumAge: 30000 }
 			);
 		}
 	}
@@ -81,7 +81,7 @@
 				() => {
 					loadShops(TOKYO_CENTER.lat, TOKYO_CENTER.lng);
 				},
-				{ timeout: 5000 }
+				{ timeout: 10000, maximumAge: 30000 }
 			);
 		} else {
 			loadShops(TOKYO_CENTER.lat, TOKYO_CENTER.lng);
@@ -104,7 +104,7 @@
 				() => {
 					loadShops(currentLat, currentLng);
 				},
-				{ timeout: 5000 }
+				{ timeout: 5000, maximumAge: 30000 }
 			);
 		} else {
 			loadShops(currentLat, currentLng);
