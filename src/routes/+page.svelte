@@ -61,7 +61,7 @@
 				() => {
 					loadShops(TOKYO_CENTER.lat, TOKYO_CENTER.lng);
 				},
-				{ timeout: 10000 }
+				{ timeout: 5000 }
 			);
 		}
 	}
@@ -81,22 +81,42 @@
 				() => {
 					loadShops(TOKYO_CENTER.lat, TOKYO_CENTER.lng);
 				},
-				{ timeout: 10000 }
+				{ timeout: 5000 }
 			);
 		} else {
 			loadShops(TOKYO_CENTER.lat, TOKYO_CENTER.lng);
 		}
 
 		// 30-second polling
-		pollTimer = setInterval(() => loadShops(currentLat, currentLng), POLL_INTERVAL);
+		pollTimer = setInterval(pollTick, POLL_INTERVAL);
 	});
+
+	function pollTick() {
+		if ('geolocation' in navigator) {
+			navigator.geolocation.getCurrentPosition(
+				(pos) => {
+					currentLat = pos.coords.latitude;
+					currentLng = pos.coords.longitude;
+					userLat = pos.coords.latitude;
+					userLng = pos.coords.longitude;
+					loadShops(currentLat, currentLng);
+				},
+				() => {
+					loadShops(currentLat, currentLng);
+				},
+				{ timeout: 5000 }
+			);
+		} else {
+			loadShops(currentLat, currentLng);
+		}
+	}
 
 	function onRadiusChange() {
 		clearTimeout(radiusDebounceTimer);
 		radiusDebounceTimer = setTimeout(() => {
 			clearInterval(pollTimer);
 			loadShops(currentLat, currentLng);
-			pollTimer = setInterval(() => loadShops(currentLat, currentLng), POLL_INTERVAL);
+			pollTimer = setInterval(pollTick, POLL_INTERVAL);
 		}, 300);
 	}
 
