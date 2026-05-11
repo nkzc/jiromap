@@ -1,4 +1,4 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import { page } from '$app/stores';
 	import { dev } from '$app/environment';
 </script>
@@ -20,6 +20,7 @@
 			<span class="brand-name">二郎マップ</span>
 		</a>
 		<nav class="nav">
+			<a href="/about" class="nav-link">About</a>
 			<a href="/shops" class="nav-link">一覧</a>
 		</nav>
 	</header>
@@ -30,6 +31,7 @@
 
 	<footer class="app-footer">
 		<nav class="footer-nav">
+			<a href="/about" class="footer-link">サービスについて</a>
 			<a href="/privacy" class="footer-link">プライバシーポリシー</a>
 			<a href="/terms" class="footer-link">利用規約</a>
 		</nav>

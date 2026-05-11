@@ -62,7 +62,7 @@ jiro/
 │   │       └── AdPlaceholder.svelte # 開発用広告プレースホルダー
 │   │
 │   └── routes/
-│       ├── +layout.svelte          # グローバルナビ・AdSense スクリプト・canonical
+│       ├── +layout.svelte          # グローバルナビ・AdSense スクリプト・canonical（フッターに /about リンクあり）
 │       ├── +page.svelte            # トップページ（地図 + 30秒ポーリング + 検索範囲スライダー + 地図中心モードトグル）
 │       │                           # mapMode: 'gps' | 'map' — GPS モード/地図中心モードの切替
 │       │                           # pollTick(): 30秒ごとに位置情報も更新（GPS モード時）
@@ -71,10 +71,11 @@ jiro/
 │       │   └── [id]/
 │       │       ├── +page.svelte    # 店舗詳細（JSON-LD・外部リンク・「この店のルール」セクション）
 │       │       └── +page.ts        # SSR データ取得（shop + recentReports）
+│       ├── about/+page.svelte      # サービス説明（6セクション: サービス紹介・機能・FAQ・免責事項等）
 │       ├── guide/+page.svelte      # 頼み方ガイド（5セクション・免責事項付き）
 │       ├── privacy/+page.svelte    # プライバシーポリシー
 │       ├── terms/+page.svelte      # 利用規約
-│       ├── sitemap.xml/+server.ts  # 動的 sitemap 生成
+│       ├── sitemap.xml/+server.ts  # 動的 sitemap 生成（/about priority:0.5・/guide priority:0.6 を含む）
 │       ├── googled6c3660b134714e9.html/+server.ts  # Google Search Console 確認
 │       └── api/
 │           ├── health/+server.ts          # GET /api/health

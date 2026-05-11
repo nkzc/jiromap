@@ -7,6 +7,8 @@ export const GET: RequestHandler = async ({ platform }) => {
 	const staticPages = [
 		{ url: '/', priority: '1.0', changefreq: 'always' },
 		{ url: '/shops', priority: '0.9', changefreq: 'always' },
+		{ url: '/about', priority: '0.5', changefreq: 'monthly' },
+		{ url: '/guide', priority: '0.6', changefreq: 'monthly' },
 		{ url: '/privacy', priority: '0.3', changefreq: 'yearly' },
 		{ url: '/terms', priority: '0.3', changefreq: 'yearly' }
 	];
