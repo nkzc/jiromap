@@ -12,11 +12,15 @@
 	export let userLat: number | null = null;
 	export let userLng: number | null = null;
 	export let onMapMove: ((lat: number, lng: number) => void) | null = null;
+	export let radiusM: number = 0;
+	export let circleLat: number = 0;
+	export let circleLng: number = 0;
 
 	let mapEl: HTMLDivElement;
 	let map: LeafletMap | null = null;
 	let markers: Marker[] = [];
 	let userMarker: import('leaflet').Marker | null = null;
+	let radiusCircle: import('leaflet').Circle | null = null;
 	let L: typeof import('leaflet') | null = null;
 
 	function createPinIcon(leaflet: typeof import('leaflet'), color: string): import('leaflet').DivIcon {
@@ -66,6 +70,23 @@
 		}
 	}
 
+	function updateRadiusCircle(leaflet: typeof import('leaflet'), lat: number, lng: number, radius: number) {
+		if (!map) return;
+		radiusCircle?.remove();
+		radiusCircle = null;
+		if (radius > 0 && lat !== 0 && lng !== 0) {
+			radiusCircle = leaflet.circle([lat, lng], {
+				radius,
+				color: '#2563eb',
+				weight: 1.5,
+				opacity: 0.4,
+				fillColor: '#2563eb',
+				fillOpacity: 0.07,
+				interactive: false
+			}).addTo(map);
+		}
+	}
+
 	function updateUserMarker(leaflet: typeof import('leaflet'), lat: number | null, lng: number | null) {
 		if (!map) return;
 		if (userMarker) {
@@ -109,11 +130,13 @@
 
 		addShopMarkers(L, shops);
 		updateUserMarker(L, userLat, userLng);
+		updateRadiusCircle(L, circleLat, circleLng, radiusM);
 	});
 
 	onDestroy(() => {
 		clearMarkers();
 		userMarker?.remove();
+		radiusCircle?.remove();
 		map?.remove();
 		map = null;
 	});
@@ -123,6 +146,9 @@
 	}
 	$: if (L && map) {
 		updateUserMarker(L, userLat, userLng);
+	}
+	$: if (L && map) {
+		updateRadiusCircle(L, circleLat, circleLng, radiusM);
 	}
 
 	export function panTo(lat: number, lng: number) {
