@@ -7,7 +7,7 @@
 	export let shops: Shop[] = [];
 	export let centerLat: number = 35.6585;
 	export let centerLng: number = 139.7454;
-	export let zoom: number = 13;
+	export let zoom: number = 11;
 	export let onShopClick: (shop: Shop) => void = () => {};
 	export let userLat: number | null = null;
 	export let userLng: number | null = null;
@@ -15,11 +15,13 @@
 	export let radiusM: number = 0;
 	export let circleLat: number = 0;
 	export let circleLng: number = 0;
+	export let mapMode: 'gps' | 'map' = 'gps';
 
 	let mapEl: HTMLDivElement;
 	let map: LeafletMap | null = null;
 	let markers: Marker[] = [];
 	let userMarker: import('leaflet').Marker | null = null;
+	let centerMarker: import('leaflet').Marker | null = null;
 	let radiusCircle: import('leaflet').Circle | null = null;
 	let L: typeof import('leaflet') | null = null;
 
@@ -70,18 +72,33 @@
 		}
 	}
 
-	function updateRadiusCircle(leaflet: typeof import('leaflet'), lat: number, lng: number, radius: number) {
+	function createCenterIcon(leaflet: typeof import('leaflet')): import('leaflet').DivIcon {
+		const html = `<div style="width:16px;height:16px;background:#16a34a;border:3px solid #fff;border-radius:50%;box-shadow:0 0 0 4px rgba(22,163,74,0.3)"></div>`;
+		return leaflet.divIcon({ html, className: '', iconSize: [16, 16], iconAnchor: [8, 8] });
+	}
+
+	function updateCenterMarker(leaflet: typeof import('leaflet'), lat: number, lng: number, mode: 'gps' | 'map') {
+		if (!map) return;
+		centerMarker?.remove();
+		centerMarker = null;
+		if (mode === 'map' && lat !== 0 && lng !== 0) {
+			centerMarker = leaflet.marker([lat, lng], { icon: createCenterIcon(leaflet), zIndexOffset: 999, interactive: false }).addTo(map);
+		}
+	}
+
+	function updateRadiusCircle(leaflet: typeof import('leaflet'), lat: number, lng: number, radius: number, mode: 'gps' | 'map') {
 		if (!map) return;
 		radiusCircle?.remove();
 		radiusCircle = null;
 		if (radius > 0 && lat !== 0 && lng !== 0) {
+			const color = mode === 'map' ? '#16a34a' : '#2563eb';
 			radiusCircle = leaflet.circle([lat, lng], {
 				radius,
-				color: '#2563eb',
-				weight: 1.5,
-				opacity: 0.4,
-				fillColor: '#2563eb',
-				fillOpacity: 0.07,
+				color,
+				weight: 2,
+				opacity: 0.6,
+				fillColor: color,
+				fillOpacity: 0.15,
 				interactive: false
 			}).addTo(map);
 		}
@@ -130,12 +147,14 @@
 
 		addShopMarkers(L, shops);
 		updateUserMarker(L, userLat, userLng);
-		updateRadiusCircle(L, circleLat, circleLng, radiusM);
+		updateCenterMarker(L, circleLat, circleLng, mapMode);
+		updateRadiusCircle(L, circleLat, circleLng, radiusM, mapMode);
 	});
 
 	onDestroy(() => {
 		clearMarkers();
 		userMarker?.remove();
+		centerMarker?.remove();
 		radiusCircle?.remove();
 		map?.remove();
 		map = null;
@@ -148,7 +167,10 @@
 		updateUserMarker(L, userLat, userLng);
 	}
 	$: if (L && map) {
-		updateRadiusCircle(L, circleLat, circleLng, radiusM);
+		updateCenterMarker(L, circleLat, circleLng, mapMode);
+	}
+	$: if (L && map) {
+		updateRadiusCircle(L, circleLat, circleLng, radiusM, mapMode);
 	}
 
 	export function panTo(lat: number, lng: number) {

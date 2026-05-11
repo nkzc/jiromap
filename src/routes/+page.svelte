@@ -177,6 +177,7 @@
 			{userLng}
 			onShopClick={handleShopClick}
 			onMapMove={handleMapMove}
+			{mapMode}
 			radiusM={$radiusKm * 1000}
 			circleLat={mapMode === 'map' ? mapCenterLat : (userLat ?? 0)}
 			circleLng={mapMode === 'map' ? mapCenterLng : (userLng ?? 0)}

@@ -1,4 +1,4 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import { onMount } from 'svelte';
 	import WaitLevelBadge from '$lib/components/WaitLevelBadge.svelte';
 	import AdBanner from '$lib/components/AdBanner.svelte';
@@ -55,6 +55,7 @@
 </svelte:head>
 
 <div class="shops-page">
+	<p class="page-intro">現在地周辺のラーメン二郎直系店舗を近い順に表示しています。赤いピンが営業中、グレーが閉店・定休日の目安です。</p>
 	<div class="page-header">
 		<h1 class="page-title">周辺の二郎</h1>
 		<span class="radius-badge">{$radiusKm}km圏内</span>
@@ -113,6 +114,14 @@
 		max-width: 640px;
 		margin: 0 auto;
 		padding: 0 0 32px;
+	}
+
+	.page-intro {
+		font-size: 13px;
+		color: #6b7280;
+		line-height: 1.7;
+		margin: 0;
+		padding: 10px 16px 0;
 	}
 
 	.page-header {
