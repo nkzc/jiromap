@@ -11,6 +11,7 @@
 	export let onShopClick: (shop: Shop) => void = () => {};
 	export let userLat: number | null = null;
 	export let userLng: number | null = null;
+	export let onMapMove: ((lat: number, lng: number) => void) | null = null;
 
 	let mapEl: HTMLDivElement;
 	let map: LeafletMap | null = null;
@@ -101,6 +102,10 @@
 			attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 			maxZoom: 19
 		}).addTo(map);
+
+		map.on('moveend', () => {
+			if (map) onMapMove?.(map.getCenter().lat, map.getCenter().lng);
+		});
 
 		addShopMarkers(L, shops);
 		updateUserMarker(L, userLat, userLng);

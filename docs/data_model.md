@@ -206,7 +206,7 @@ CREATE INDEX idx_shop_statuses_aggregated ON shop_statuses(aggregated_at DESC);
 
 - `PRIMARY KEY` を `shop_id` にすることで `INSERT OR REPLACE` による upsert を効率化
 - KV は「最終整合性（Eventually Consistent）」のため、KV から取得できない場合に D1 の本テーブルをフォールバックとして参照する
-- 集計ロジックは Workers の Cron Trigger（30秒間隔）で実行（後述）
+- 集計ロジックは Workers の Cron Trigger（1分間隔）で実行（後述）
 
 ---
 
@@ -316,50 +316,29 @@ erDiagram
 
 ---
 
-## 3. 並び情報の更新フロー
+## 3. ステータス更新フロー
 
-### 3-1. ユーザー投稿から KV キャッシュ反映までの流れ
+> **注記**: `POST /api/shops/:id/reports`（混雑投稿 API）は削除済み。
+> `ReportForm.svelte`・`api.ts` の `postReport()` とともに除去された。
+> `crowd_reports` テーブルと `spam_blocks` テーブルの定義は将来の復活に備えて残している。
+
+### 3-1. バッチ集計から KV キャッシュ反映までの流れ（現在の実装）
 
 ```
-[ユーザー] → POST /api/shops/:id/reports
-    |
-    ▼
-[Cloudflare Workers]
-    1. リクエスト検証
-       - CF-Connecting-IP を取得 → SHA-256 ハッシュ化
-       - Cookie の session_id を取得（なければ新規 UUID を発行し Set-Cookie）
-       - wait_level: 0〜4 のバリデーション
-       - comment: 100文字以内のバリデーション
-    |
-    2. スパムチェック（KV 優先、フォールバックで D1）
-       - KV key: `spam:session:{session_id}:shop:{shop_id}`
-         → 存在すれば 429 Too Many Requests を返す
-       - KV key: `spam:ip:{ip_hash}:shop:{shop_id}`
-         → 存在すれば 429 Too Many Requests を返す
-    |
-    3. D1 に保存
-       INSERT INTO crowd_reports (shop_id, wait_level, comment, session_id, ip_hash)
-       VALUES (?, ?, ?, ?, ?)
-    |
-    4. KV にスパムブロック情報を書き込み（TTL: 1800秒 = 30分）
-       - KV.put(`spam:session:{session_id}:shop:{shop_id}`, "1", { expirationTtl: 1800 })
-       - KV.put(`spam:ip:{ip_hash}:shop:{shop_id}`, "1", { expirationTtl: 1800 })
-    |
-    5. KV のステータスキャッシュを削除（即時無効化）
-       - KV.delete(`status:shop:{shop_id}`)
-       ※ 次のポーリングリクエスト時に D1 から再計算される
-    |
-    ▼
-[レスポンス 201 Created]
-    - 投稿した wait_level を含む最新ステータスを返す
-    - クライアントは即時 UI 更新（楽観的更新）
+[Cron Worker が1分ごとに実行]
+    → crowd_reports の直近30分を集計
+    → shop_statuses を upsert
+    → KV に結果をキャッシュ（90秒間有効）
 
-    ＊ D1 への write と KV 操作は Workers 内で直列に実行（Workers の CPU 時間制限 10ms に収まる軽量処理）
+[ユーザーが30秒ポーリング]
+    GET /api/shops/:id/status
+    → KV ヒット → 即返却
+    → KV ミス → D1 shop_statuses からフォールバック
 ```
 
-### 3-2. 30秒バッチ集計（Cloudflare Workers Cron Trigger）
+### 3-2. バッチ集計（Cloudflare Workers Cron Trigger）
 
-`tech_decision.md` で言及した「30秒バッチ集計」の具体的な実装方針を示す。
+実装方針を示す。
 
 **Cron Trigger の設定（wrangler.toml）**
 

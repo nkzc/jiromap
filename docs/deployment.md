@@ -41,8 +41,11 @@ npm run deploy:cron
 # マイグレーション適用（本番）
 wrangler d1 execute jiromap --remote --file=migrations/0001_initial.sql
 
-# seed データ投入（本番）
+# seed データ投入（本番・全マイグレーションを順番に適用）
 wrangler d1 execute jiromap --remote --file=migrations/0002_seed.sql
+wrangler d1 execute jiromap --remote --file=migrations/0003_shop_rules.sql
+wrangler d1 execute jiromap --remote --file=migrations/0004_seed_shops.sql
+wrangler d1 execute jiromap --remote --file=migrations/0005_update_shops.sql
 
 # SQL を直接実行（確認用）
 wrangler d1 execute jiromap --remote --command="SELECT id, name FROM shops"
@@ -83,6 +86,9 @@ npm run wrangler:dev
 # ローカル D1 にマイグレーション適用（wrangler dev 前に1回だけ実行）
 wrangler d1 execute jiromap --local --file=migrations/0001_initial.sql
 wrangler d1 execute jiromap --local --file=migrations/0002_seed.sql
+wrangler d1 execute jiromap --local --file=migrations/0003_shop_rules.sql
+wrangler d1 execute jiromap --local --file=migrations/0004_seed_shops.sql
+wrangler d1 execute jiromap --local --file=migrations/0005_update_shops.sql
 ```
 
 **`npm run dev` と `npm run wrangler:dev` の違い**

@@ -54,21 +54,22 @@ jiro/
 │   │   └── components/
 │   │       ├── Map.svelte          # Leaflet 地図（SSR 非対応, onMount で動的 import）
 │       │                       #   props: userLat/userLng — 現在地ピン（青ドット）表示
+│       │                       #   props: onMapMove — moveend イベントで地図中心座標を通知
 │   │       ├── ShopCard.svelte     # 店舗カード（地図のポップアップ）
 │       │                       #   「ルートを見る」= Google Maps directions 外部リンク
-│       │                       #   「頼み方」= /shops/{id} への内部リンク（ルール情報がある店舗のみ有効。ない場合は disabled）
-│   │       ├── ReportForm.svelte   # 混雑投稿フォーム
 │   │       ├── WaitLevelBadge.svelte # 混雑レベルバッジ
 │   │       ├── AdBanner.svelte     # 広告（dev=プレースホルダー, 本番=AdSense）
 │   │       └── AdPlaceholder.svelte # 開発用広告プレースホルダー
 │   │
 │   └── routes/
 │       ├── +layout.svelte          # グローバルナビ・AdSense スクリプト・canonical
-│       ├── +page.svelte            # トップページ（地図 + 30秒ポーリング + 検索範囲スライダー）
+│       ├── +page.svelte            # トップページ（地図 + 30秒ポーリング + 検索範囲スライダー + 地図中心モードトグル）
+│       │                           # mapMode: 'gps' | 'map' — GPS モード/地図中心モードの切替
+│       │                           # pollTick(): 30秒ごとに位置情報も更新（GPS モード時）
 │       ├── shops/
 │       │   ├── +page.svelte        # 店舗一覧（距離順・AdSense 5件ごと・現在の範囲km表示）
 │       │   └── [id]/
-│       │       ├── +page.svelte    # 店舗詳細（JSON-LD・投稿フォーム・外部リンク・「この店のルール」セクション）
+│       │       ├── +page.svelte    # 店舗詳細（JSON-LD・外部リンク・「この店のルール」セクション）
 │       │       └── +page.ts        # SSR データ取得（shop + recentReports）
 │       ├── guide/+page.svelte      # 頼み方ガイド（5セクション・免責事項付き）
 │       ├── privacy/+page.svelte    # プライバシーポリシー
@@ -81,15 +82,17 @@ jiro/
 │           └── shops/[id]/
 │               ├── +server.ts             # GET /api/shops/:id
 │               ├── status/+server.ts      # GET /api/shops/:id/status
-│               └── reports/+server.ts     # GET/POST /api/shops/:id/reports
+│               └── reports/+server.ts     # GET /api/shops/:id/reports（POST は削除済み）
 │
 ├── migrations/
 │   ├── 0001_initial.sql            # テーブル定義（4テーブル）
 │   ├── 0002_seed.sql               # 初期 8 店舗データ
-│   └── 0003_shop_rules.sql         # shops テーブルにルール列追加（queue_notes, topping_notes, shop_notes）
+│   ├── 0003_shop_rules.sql         # shops テーブルにルール列追加（queue_notes, topping_notes, shop_notes）
+│   ├── 0004_seed_shops.sql         # 直系二郎 48 店舗データ追加
+│   └── 0005_update_shops.sql       # 営業時間・定休日の情報更新（jiro-matome.com をもとに）
 │
 ├── tests/
-│   ├── unit/                       # ユニットテスト（117 件・D1/KV はモック）
+│   ├── unit/                       # ユニットテスト（95 件・D1/KV はモック）
 │   └── integration/                # 統合テスト（18 件・本番 URL に実際に fetch）
 │
 ├── cron-worker.ts                  # Cron バッチ Worker 本体
@@ -110,27 +113,15 @@ jiro/
 | GET | `/api/shops/:id` | 店舗詳細 |
 | GET | `/api/shops/:id/status` | 混雑ステータス（KV キャッシュ優先） |
 | GET | `/api/shops/:id/reports` | 直近 30 分の投稿一覧 |
-| POST | `/api/shops/:id/reports` | 混雑投稿（スパムチェック・KV Purge） |
 
 ---
 
-## データフロー：混雑投稿から表示まで
+## データフロー：ステータス表示まで
+
+> **注記**: `POST /api/shops/:id/reports`（混雑投稿）は削除済み。現在は読み取り専用フロー。
 
 ```
-[ユーザーが投稿]
-    │ POST /api/shops/:id/reports
-    ▼
-[Workers API]
-    1. IP ハッシュ化（SHA-256 + ソルト）
-    2. セッション ID 取得（Cookie）
-    3. KV スパムチェック × 2（セッション・IP）
-       → 重複なら 429
-    4. D1 に INSERT（crowd_reports）
-    5. KV にスパムブロック書き込み（TTL 1800秒）
-    6. KV のステータスキャッシュ削除（status:shop:{id}）
-    7. 201 レスポンス（最新ステータスを即時返却）
-
-[1 分後: Cron Worker が実行]
+[Cron Worker が 1 分ごとに実行]
     1. crowd_reports の直近 30 分を Window 関数で集計
     2. shop_statuses を upsert
     3. KV に結果を書き込み（差分チェック: 変化なしはスキップ）

@@ -69,7 +69,7 @@ Google AdSense・アフィリエイトによる収益化が主目的。
    - 失敗 → 失敗内容を添えて implementer に差し戻し → 1に戻る
 4. **docs_writer** がドキュメント更新（tester グリーン後、必ず呼ぶ）
    - 実装内容の要約と変更ファイル一覧をリーダーが渡す
-   - 関連する `docs/` ファイルを自動判断して更新
+   - 関連する `docs/` ファイルと `CLAUDE.md` を自動判断して更新
    - 人間から明示的に依頼された場合も同様に呼ぶ
 5. リーダーが人間に「reviewer LGTM・tester グリーン・docs 更新済み」を報告し、デプロイ承認を求める
 6. 承認後、本番デプロイ（`docs/deployment.md` 参照）
@@ -81,7 +81,7 @@ Google AdSense・アフィリエイトによる収益化が主目的。
 - [ ] implementer を Agent tool で呼び、ファイル編集を委譲したか
 - [ ] reviewer を Agent tool で呼び、LGTM を得たか
 - [ ] tester を Agent tool で呼び、全テスト・ビルドがグリーンか
-- [ ] docs_writer を Agent tool で呼び、関連 docs/ を更新したか
+- [ ] docs_writer を Agent tool で呼び、関連 docs/ と CLAUDE.md を更新したか
 - [ ] 上記4つが揃うまで「完了」とユーザーに報告していないか
 
 ## テスト方針
@@ -115,7 +115,7 @@ wrangler d1 execute jiromap --remote --file=migrations/000X_xxxx.sql
 ```
 src/            # ソースコード（詳細は docs/architecture.md）
 tests/
-  unit/         # ユニットテスト（117 件）
+  unit/         # ユニットテスト（95 件）
   integration/  # 統合テスト（18 件）
 migrations/     # D1 マイグレーションファイル
 docs/           # ドキュメント

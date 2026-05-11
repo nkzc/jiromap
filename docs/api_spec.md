@@ -25,8 +25,11 @@
 | `GET` | `/api/shops` | 周辺店舗一覧取得（緯度・経度・半径指定） | 不要 | 60 req/分（IP別） |
 | `GET` | `/api/shops/:id` | 店舗詳細取得 | 不要 | 60 req/分（IP別） |
 | `GET` | `/api/shops/:id/status` | 店舗の現在の混雑ステータス取得 | 不要 | 120 req/分（IP別） |
-| `POST` | `/api/shops/:id/reports` | 混雑情報投稿 | 不要（匿名） | 1 req/30分（セッション＋IP別・店舗単位）、10 req/分（IP別・全体） |
 | `GET` | `/api/shops/:id/reports` | 店舗の直近投稿一覧取得 | 不要 | 60 req/分（IP別） |
+
+> **注記**: `POST /api/shops/:id/reports`（混雑投稿）は削除済み。
+> `ReportForm.svelte` コンポーネント・`api.ts` の `postReport()` とともに除去された。
+> 混雑投稿機能を復活させる場合は `reports/+server.ts` に POST ハンドラを再実装すること。
 
 ---
 
@@ -296,9 +299,12 @@ GET /api/shops/1/status
 
 ---
 
-### 2-4. `POST /api/shops/:id/reports` — 混雑投稿
+### 2-4. `POST /api/shops/:id/reports` — 混雑投稿（削除済み）
 
-混雑・待ち状況をユーザーが投稿する。
+> **このエンドポイントは削除済み**。`reports/+server.ts` の POST ハンドラ・`ReportForm.svelte`・`api.ts` の `postReport()` とともに除去された。
+> 再実装の参考用として仕様を残す。
+
+混雑・待ち状況をユーザーが投稿する（旧仕様）。
 スパムチェック（セッション + IP ハッシュ）を通過した場合のみ D1 に保存される。
 
 #### パスパラメータ
@@ -527,8 +533,6 @@ GET /api/health
 | `GET /api/shops` | IP別 | 60 | 3,600 | 地図移動のたびに呼ばれることを想定 |
 | `GET /api/shops/:id` | IP別 | 60 | 3,600 | — |
 | `GET /api/shops/:id/status` | IP別 | 120 | 7,200 | 30秒ポーリング想定（2 req/分）× ユーザー数 |
-| `POST /api/shops/:id/reports` | IP別（全体） | 10 | 600 | 投稿ボタンの連打防止 |
-| `POST /api/shops/:id/reports` | セッション＋IP別（店舗単位） | — | 2（= 1回/30分） | 重複投稿防止（shop 単位） |
 | `GET /api/shops/:id/reports` | IP別 | 60 | 3,600 | — |
 | `GET /api/health` | なし | 無制限 | 無制限 | 監視用 |
 
@@ -657,15 +661,11 @@ X-RateLimit-Reset: 1746187200
 |---|---|---|---|
 | 400 | `MISSING_REQUIRED_PARAMS` | 必須クエリパラメータが不足 | `GET /api/shops` |
 | 400 | `INVALID_PARAM_VALUE` | クエリパラメータの値が範囲外または不正 | `GET /api/shops` |
-| 400 | `INVALID_SHOP_ID` | 店舗IDが整数でない | `GET/POST /api/shops/:id/*` |
-| 400 | `INVALID_WAIT_LEVEL` | wait_level が 0〜4 の範囲外 | `POST /api/shops/:id/reports` |
-| 400 | `COMMENT_TOO_LONG` | comment が100文字超 | `POST /api/shops/:id/reports` |
-| 400 | `INVALID_REQUEST_BODY` | リクエストボディが JSON としてパースできない | `POST /api/shops/:id/reports` |
-| 404 | `SHOP_NOT_FOUND` | 指定された店舗IDが存在しない | `GET/POST /api/shops/:id/*` |
+| 400 | `INVALID_SHOP_ID` | 店舗IDが整数でない | `GET /api/shops/:id/*` |
+| 404 | `SHOP_NOT_FOUND` | 指定された店舗IDが存在しない | `GET /api/shops/:id/*` |
 | 404 | `ENDPOINT_NOT_FOUND` | 存在しない API パスへのアクセス | すべて |
 | 405 | `METHOD_NOT_ALLOWED` | 許可されていない HTTP メソッド | すべて |
 | 429 | `RATE_LIMIT_EXCEEDED` | IP ベースのレート制限超過 | すべて |
-| 429 | `DUPLICATE_REPORT` | 同一店舗への30分以内の重複投稿 | `POST /api/shops/:id/reports` |
 | 500 | `INTERNAL_SERVER_ERROR` | Workers 内の予期しないエラー | すべて |
 | 500 | `DATABASE_ERROR` | D1 クエリエラー | すべて |
 | 503 | `SERVICE_UNAVAILABLE` | D1 または KV に接続できない | `GET /api/health` |
@@ -757,8 +757,7 @@ src/routes/api/
 │       ├── status/
 │       │   └── +server.ts  # GET /api/shops/:id/status
 │       └── reports/
-│           └── +server.ts  # GET /api/shops/:id/reports
-│                           # POST /api/shops/:id/reports
+│           └── +server.ts  # GET /api/shops/:id/reports（POST は削除済み）
 ```
 
 ### C. D1 の Prepared Statements（SQL インジェクション対策）

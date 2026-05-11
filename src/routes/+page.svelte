@@ -25,6 +25,9 @@
 	let pollTimer: ReturnType<typeof setInterval>;
 	let radiusDebounceTimer: ReturnType<typeof setTimeout>;
 	let mapComponent: Map;
+	let mapMode: 'gps' | 'map' = 'gps';
+	let mapCenterLat = currentLat;
+	let mapCenterLng = currentLng;
 
 	async function loadShops(lat: number, lng: number) {
 		loading = true;
@@ -45,6 +48,25 @@
 
 	function closePanel() {
 		selectedShop = null;
+	}
+
+	function handleMapMove(lat: number, lng: number) {
+		mapCenterLat = lat;
+		mapCenterLng = lng;
+		if (mapMode === 'map') {
+			loadShops(lat, lng);
+		}
+	}
+
+	function toggleMapMode() {
+		mapMode = mapMode === 'gps' ? 'map' : 'gps';
+		if (mapMode === 'map') {
+			loadShops(mapCenterLat, mapCenterLng);
+		} else {
+			mapCenterLat = currentLat;
+			mapCenterLng = currentLng;
+			loadShops(currentLat, currentLng);
+		}
 	}
 
 	function locateUser() {
@@ -92,6 +114,10 @@
 	});
 
 	function pollTick() {
+		if (mapMode === 'map') {
+			loadShops(mapCenterLat, mapCenterLng);
+			return;
+		}
 		if ('geolocation' in navigator) {
 			navigator.geolocation.getCurrentPosition(
 				(pos) => {
@@ -115,7 +141,8 @@
 		clearTimeout(radiusDebounceTimer);
 		radiusDebounceTimer = setTimeout(() => {
 			clearInterval(pollTimer);
-			loadShops(currentLat, currentLng);
+			loadShops(mapMode === 'map' ? mapCenterLat : currentLat,
+			          mapMode === 'map' ? mapCenterLng : currentLng);
 			pollTimer = setInterval(pollTick, POLL_INTERVAL);
 		}, 300);
 	}
@@ -148,6 +175,7 @@
 			{userLat}
 			{userLng}
 			onShopClick={handleShopClick}
+			onMapMove={handleMapMove}
 		/>
 
 		<!-- Radius control -->
@@ -164,6 +192,16 @@
 			/>
 			<span class="radius-value">{$radiusKm}km</span>
 		</div>
+
+		<!-- Mode toggle -->
+		<button
+			class="mode-btn"
+			class:active={mapMode === 'map'}
+			on:click={toggleMapMode}
+			aria-label="検索モード切替"
+		>
+			{mapMode === 'gps' ? '現在地' : '地図中心'}
+		</button>
 
 		<!-- Locate button -->
 		<button class="locate-btn" on:click={locateUser} aria-label="現在地に移動">
@@ -314,5 +352,32 @@
 		min-width: 36px;
 		text-align: right;
 		user-select: none;
+	}
+
+	.mode-btn {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		z-index: 800;
+		background: #fff;
+		border: 2px solid rgba(0, 0, 0, 0.2);
+		border-radius: 6px;
+		padding: 5px 10px;
+		font-size: 12px;
+		font-weight: 600;
+		cursor: pointer;
+		color: #555;
+		transition: background 0.15s;
+		white-space: nowrap;
+	}
+
+	.mode-btn:hover {
+		background: #f4f4f4;
+	}
+
+	.mode-btn.active {
+		background: #eff6ff;
+		color: #2563eb;
+		border-color: #2563eb;
 	}
 </style>
