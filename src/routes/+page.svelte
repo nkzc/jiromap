@@ -1,4 +1,4 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 	import Map from '$lib/components/Map.svelte';
 	import ShopCard from '$lib/components/ShopCard.svelte';
@@ -166,6 +166,7 @@
 </svelte:head>
 
 <div class="page">
+	<p class="tagline">直系二郎を地図で検索 · 営業中かを確認</p>
 	<div class="map-wrap">
 		<Map
 			bind:this={mapComponent}
@@ -228,15 +229,24 @@
 <style>
 	.page {
 		position: relative;
-		height: calc(100vh - var(--header-height, 52px));
-		height: calc(100dvh - var(--header-height, 52px));
 		display: flex;
 		flex-direction: column;
 	}
 
+	.tagline {
+		margin: 0;
+		padding: 6px 16px;
+		font-size: 12px;
+		color: #6b7280;
+		background: #f9fafb;
+		border-bottom: 1px solid #e5e7eb;
+		text-align: center;
+	}
+
 	.map-wrap {
-		flex: 1;
 		position: relative;
+		height: calc(100vh - var(--header-height, 52px) - 31px);
+		height: calc(100dvh - var(--header-height, 52px) - 31px);
 	}
 
 	.locate-btn {

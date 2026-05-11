@@ -33,7 +33,6 @@
 		<nav class="footer-nav">
 			<a href="/about" class="footer-link">サービスについて</a>
 			<a href="/privacy" class="footer-link">プライバシーポリシー</a>
-			<a href="/terms" class="footer-link">利用規約</a>
 		</nav>
 		<p class="footer-copy">&copy; 2026 二郎マップ</p>
 	</footer>
