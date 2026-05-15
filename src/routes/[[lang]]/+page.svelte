@@ -164,7 +164,7 @@
 <svelte:head>
 	{#if lang === 'en'}
 		<title>Jiro Map — Find Ramen Jiro Near You</title>
-		<meta name="description" content="Find Ramen Jiro locations near you on a map. Check business hours, access info, and which shops are open right now." />
+		<meta name="description" content="Explore Ramen Jiro on a Tokyo ramen map. Find Japan ramen spots open now — check hours and get directions to all 48 direct-lineage locations." />
 		<meta property="og:title" content="Jiro Map — Find Ramen Jiro Near You" />
 		<meta property="og:description" content="Find Ramen Jiro locations on a map. Sorted by distance from your current location." />
 	{:else}

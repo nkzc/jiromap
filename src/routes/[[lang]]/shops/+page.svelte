@@ -52,7 +52,7 @@
 <svelte:head>
 	{#if lang === 'en'}
 		<title>Jiro Shop List | Jiro Map</title>
-		<meta name="description" content="List of Ramen Jiro locations near you, sorted by distance." />
+		<meta name="description" content="Browse all Japan ramen restaurants in the Ramen Jiro family. See which shops are open now, sorted by distance from your location." />
 		<meta property="og:title" content="Jiro Map — Nearby Jiro Shops" />
 		<meta property="og:description" content="Find Ramen Jiro locations near you." />
 		<meta property="og:url" content="https://jiromap.pages.dev/en/shops" />

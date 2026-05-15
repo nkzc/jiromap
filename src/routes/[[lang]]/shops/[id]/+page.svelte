@@ -50,7 +50,7 @@
 	{#if shop}
 		{#if lang === 'en'}
 			<title>{shop.name} — Hours & Status | Jiro Map</title>
-			<meta name="description" content="{shop.name} ({shop.address}) — real-time status, hours, and access info." />
+			<meta name="description" content="{shop.name} — Tokyo ramen in Japan. Check if it's open now, view hours, address, and get directions to this Ramen Jiro location." />
 			<meta property="og:title" content="{shop.name} — Jiro Map" />
 			<meta property="og:description" content="Check current status of {shop.name}" />
 			<meta property="og:url" content="https://jiromap.pages.dev/en/shops/{shop.id}" />

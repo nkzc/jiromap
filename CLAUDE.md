@@ -98,6 +98,8 @@ Google AdSense・アフィリエイトによる収益化が主目的。
   - 短いラベル類: `src/lib/i18n.ts` の `ja` / `en` 両キーを更新
   - About・Privacy などの長文: 各ページ内の `{#if lang === 'en'}...{:else}...{/if}` 両ブロックを更新
 - 言語判定の優先順位: Cookie `lang` → `cf-ipcountry`（JP以外→英語） → デフォルト日本語
+- `/en` で始まる URL へのレスポンスでは `hooks.server.ts` の `transformPageChunk` が `<html lang="ja">` を `<html lang="en">` に動的置換する（SEO 向け）
+- 英語ページの meta description には `Tokyo ramen map`・`Japan ramen`・`open now` などの国際向けキーワードを含める
 
 ## セキュリティ方針（変更禁止）
 - 全 D1 クエリは **Prepared Statements**（`.prepare().bind()`）を使う

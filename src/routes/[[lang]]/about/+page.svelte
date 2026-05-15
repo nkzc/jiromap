@@ -8,7 +8,7 @@
 <svelte:head>
 	{#if lang === 'en'}
 		<title>About Jiro Map | Jiro Map</title>
-		<meta name="description" content="Jiro Map helps you find Ramen Jiro locations near you. Check which shops are open right now across 48 direct-lineage locations in Japan." />
+		<meta name="description" content="Your Tokyo ramen guide and Japan ramen map for Ramen Jiro. Discover 48 direct-lineage shops, check open/closed status, and plan your visit." />
 		<meta property="og:title" content="About Jiro Map" />
 		<meta property="og:description" content="Find Ramen Jiro locations nationwide. Check open/closed status in real time." />
 		<meta property="og:url" content="https://jiromap.pages.dev/en/about" />

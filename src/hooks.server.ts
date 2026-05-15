@@ -122,7 +122,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 	}
 
-	return resolve(event);
+	const lang = event.url.pathname.startsWith('/en') ? 'en' : 'ja';
+	return resolve(event, {
+		transformPageChunk: ({ html }) => html.replace('<html lang="ja"', `<html lang="${lang}"`)
+	});
 };
 
 // ──────────────────────────────────────────────

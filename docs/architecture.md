@@ -30,7 +30,7 @@ jiro/
 ├── src/
 │   ├── app.html                    # HTML テンプレート（Leaflet CSS, preconnect）
 │   ├── app.d.ts                    # Cloudflare Platform 型定義
-│   ├── hooks.server.ts             # バッチ集計ロジック（cron-worker.ts と共有）
+│   ├── hooks.server.ts             # SvelteKit handle hook（言語リダイレクト・transformPageChunk で <html lang> を動的置換）＋バッチ集計ロジック（cron-worker.ts と共有）
 │   │
 │   ├── lib/
 │   │   ├── config.ts               # アプリ設定定数（RADIUS_MIN_KM=5, RADIUS_MAX_KM=50, RADIUS_STEP_KM=5, RADIUS_DEFAULT_KM=20 等）
