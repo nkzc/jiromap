@@ -1,14 +1,101 @@
-﻿<svelte:head>
-	<title>二郎マップについて | 二郎マップ</title>
-	<meta name="description" content="二郎マップはラーメン二郎の全国直系店舗を地図で探せるサービスです。現在地から近い順に表示し、営業中かどうかをリアルタイムで確認できます。" />
-	<meta property="og:title" content="二郎マップについて" />
-	<meta property="og:description" content="ラーメン二郎の全国直系店舗を地図で探せるサービス。現在地周辺の営業中店舗を一目で確認できます。" />
+<script lang="ts">
+	import type { PageData } from './$types';
+
+	export let data: PageData;
+	$: lang = data.lang;
+</script>
+
+<svelte:head>
+	{#if lang === 'en'}
+		<title>About Jiro Map | Jiro Map</title>
+		<meta name="description" content="Jiro Map helps you find Ramen Jiro locations near you. Check which shops are open right now across 48 direct-lineage locations in Japan." />
+		<meta property="og:title" content="About Jiro Map" />
+		<meta property="og:description" content="Find Ramen Jiro locations nationwide. Check open/closed status in real time." />
+		<meta property="og:url" content="https://jiromap.pages.dev/en/about" />
+	{:else}
+		<title>二郎マップについて | 二郎マップ</title>
+		<meta name="description" content="二郎マップはラーメン二郎の全国直系店舗を地図で探せるサービスです。現在地から近い順に表示し、営業中かどうかをリアルタイムで確認できます。" />
+		<meta property="og:title" content="二郎マップについて" />
+		<meta property="og:description" content="ラーメン二郎の全国直系店舗を地図で探せるサービス。現在地周辺の営業中店舗を一目で確認できます。" />
+		<meta property="og:url" content="https://jiromap.pages.dev/about" />
+	{/if}
 	<meta property="og:type" content="website" />
-	<meta property="og:url" content="https://jiromap.pages.dev/about" />
 	<meta property="og:image" content="https://jiromap.pages.dev/ogp.png" />
 	<meta name="twitter:card" content="summary_large_image" />
 </svelte:head>
 
+{#if lang === 'en'}
+<div class="about-page">
+	<h1 class="page-title">About Jiro Map</h1>
+
+	<section class="section">
+		<h2 class="section-title">What is this service?</h2>
+		<p>Jiro Map is a <strong>map service for finding direct-lineage Ramen Jiro shops near your current location</strong>. It was built to quickly answer: "Is there a Jiro near me?" and "Is it open today?"</p>
+		<p>We cover 48 direct-lineage Jiro shops across Japan. Open/closed status is determined in real time based on each shop's business hours and displayed as pin colors on the map. A simple, easy-to-use tool for Jiro fans looking for their next bowl.</p>
+	</section>
+
+	<section class="section">
+		<h2 class="section-title">What is Ramen Jiro?</h2>
+		<p>Ramen Jiro is a ramen chain founded in 1968 in Mita, Tokyo. Known for its thick tonkotsu-soy broth, extra-thick noodles, mountains of bean sprouts and cabbage, and large slabs of pork (called "buta"), it has built a cult following among fans known as "Jiro-rians".</p>
+		<p>There are about 50 direct-lineage shops nationwide. Each is run by a master trained at the original shop, maintaining the Jiro style while adding their own character. The "call" culture — telling staff your preferences for vegetables, garlic, fat, and soy sauce — is unique to Jiro.</p>
+	</section>
+
+	<section class="section">
+		<h2 class="section-title">Key Features</h2>
+		<ul class="feature-list">
+			<li>
+				<span class="feature-icon">📍</span>
+				<div>
+					<strong>Find Jiro Near You</strong>
+					<p>Uses GPS to get your current location and shows nearby direct-lineage shops as pins on a map. A <strong>blue semi-transparent circle</strong> shows the search radius around you. Adjust the range from 5–50km using the slider.</p>
+				</div>
+			</li>
+			<li>
+				<span class="feature-icon">🔴</span>
+				<div>
+					<strong>Pin Colors Show Status</strong>
+					<p>Shops likely to be open show as <strong>red pins</strong>; closed or holiday shops show as <strong>grey pins</strong>. Your current location is shown as a <strong>blue pin</strong>.</p>
+				</div>
+			</li>
+			<li>
+				<span class="feature-icon">🗺</span>
+				<div>
+					<strong>Map Center Mode</strong>
+					<p>Switch to "Map Center" mode to search based on wherever you scroll the map — great for planning trips or finding shops along a route. A <strong>green pin</strong> and green circle mark the search center.</p>
+				</div>
+			</li>
+			<li>
+				<span class="feature-icon">🧭</span>
+				<div>
+					<strong>Directions</strong>
+					<p>Tap a pin to open the shop card, then tap "Open in Maps" to get directions from your current location via Google Maps.</p>
+				</div>
+			</li>
+		</ul>
+	</section>
+
+	<section class="section">
+		<h2 class="section-title">How to Use</h2>
+		<ol class="steps">
+			<li><strong>Allow location access</strong> — When you open the page, your browser will ask for location permission. Allow it to automatically show nearby shops.</li>
+			<li><strong>Check the red pins</strong> — Red pins indicate shops likely to be open. Grey pins are closed or on a regular holiday.</li>
+			<li><strong>Adjust the radius</strong> — Use the slider at the bottom of the screen to change the search range from 5–50km. Default is 10km.</li>
+			<li><strong>Tap a pin for details</strong> — The shop card shows hours, nearest station, and a button to open directions.</li>
+		</ol>
+	</section>
+
+	<section class="section">
+		<h2 class="section-title">About Listed Shops</h2>
+		<p>We currently list <strong>48 direct-lineage Ramen Jiro locations</strong>, covering all of Japan from Hokkaido to Fukuoka. The shop list is updated as needed.</p>
+		<p>Information (hours, closed days, address, etc.) is compiled from publicly available sources, but may change without notice due to individual shop circumstances. Please check each shop's official social media for the latest information before visiting.</p>
+	</section>
+
+	<section class="section">
+		<h2 class="section-title">Disclaimer</h2>
+		<p>While we strive to provide accurate information, we cannot guarantee the accuracy, completeness, or timeliness of any content on this service. We accept no responsibility for any loss or inconvenience resulting from reliance on information provided here.</p>
+	</section>
+</div>
+{:else}
 <div class="about-page">
 	<h1 class="page-title">二郎マップについて</h1>
 
@@ -79,6 +166,7 @@
 		<p>本サービスに掲載している情報は、可能な限り正確な情報を提供するよう努めていますが、その内容の正確性・完全性・最新性を保証するものではありません。掲載情報に基づいて訪問した結果生じた損害について、当サービスは一切の責任を負いません。</p>
 	</section>
 </div>
+{/if}
 
 <style>
 	.about-page {
@@ -148,11 +236,6 @@
 		color: var(--color-muted, #6b7280);
 	}
 
-	.feature-list a {
-		color: #dc2626;
-		text-decoration: underline;
-	}
-
 	.steps {
 		margin: 0;
 		padding-left: 20px;
@@ -165,32 +248,5 @@
 		font-size: 14px;
 		line-height: 1.7;
 		color: var(--color-text, #1f2937);
-	}
-
-	.faq {
-		display: flex;
-		flex-direction: column;
-		gap: 16px;
-	}
-
-	.faq-item {
-		display: flex;
-		flex-direction: column;
-		gap: 4px;
-	}
-
-	dt {
-		font-size: 14px;
-		font-weight: 600;
-		color: var(--color-text, #1f2937);
-	}
-
-	dd {
-		font-size: 13px;
-		line-height: 1.7;
-		color: var(--color-muted, #6b7280);
-		margin: 0;
-		padding-left: 12px;
-		border-left: 3px solid #e5e7eb;
 	}
 </style>

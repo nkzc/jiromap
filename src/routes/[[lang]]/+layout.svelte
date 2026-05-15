@@ -1,27 +1,62 @@
-﻿<script lang="ts">
+<script lang="ts">
 	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 	import { dev } from '$app/environment';
+	import { t } from '$lib/i18n.js';
+	import type { LayoutData } from './$types';
+
+	export let data: LayoutData;
+	$: lang = data.lang;
+	$: tr = t[lang];
+
+	function switchLang() {
+		const targetLang = lang === 'ja' ? 'en' : 'ja';
+		// Set cookie for 1 year
+		document.cookie = `lang=${targetLang}; path=/; max-age=31536000; SameSite=Lax`;
+
+		// Build target URL
+		const currentPath = $page.url.pathname;
+		let targetPath: string;
+		if (targetLang === 'en') {
+			// Switching to English: add /en prefix
+			// Current path is like / or /about or /shops etc.
+			targetPath = '/en' + (currentPath === '/' ? '' : currentPath);
+		} else {
+			// Switching to Japanese: remove /en prefix
+			targetPath = currentPath.replace(/^\/en/, '') || '/';
+		}
+		goto(targetPath);
+	}
 </script>
 
 <svelte:head>
 	<meta name="robots" content="index, follow" />
 	<meta name="google-site-verification" content="VpxkujgvrRn_CUaTzlRc1EFhzsUos8WG9Dvaw_QX0Cg" />
 	<link rel="canonical" href="https://jiromap.pages.dev{$page.url.pathname}" />
+	<link rel="alternate" hreflang="ja"
+		href="https://jiromap.pages.dev{lang === 'en' ? ($page.url.pathname.replace(/^\/en/, '') || '/') : $page.url.pathname}" />
+	<link rel="alternate" hreflang="en"
+		href="https://jiromap.pages.dev{lang === 'en' ? $page.url.pathname : '/en' + ($page.url.pathname === '/' ? '' : $page.url.pathname)}" />
+	<link rel="alternate" hreflang="x-default"
+		href="https://jiromap.pages.dev{lang === 'en' ? ($page.url.pathname.replace(/^\/en/, '') || '/') : $page.url.pathname}" />
 	{#if !dev}
-		<!-- AdSense: 本番のみ読み込み（審査通過後に publisher ID を差し替える） -->
+		<!-- AdSense: 本番のみ読み込み -->
 		<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4102046917046088" crossorigin="anonymous"></script>
 	{/if}
 </svelte:head>
 
 <div class="app-wrapper">
 	<header class="app-header">
-		<a href="/" class="brand">
+		<a href={lang === 'en' ? '/en' : '/'} class="brand">
 			<span class="brand-icon">🍜</span>
-			<span class="brand-name">二郎マップ</span>
+			<span class="brand-name">{tr.siteTitle}</span>
 		</a>
 		<nav class="nav">
-			<a href="/about" class="nav-link">About</a>
-			<a href="/shops" class="nav-link">一覧</a>
+			<a href={lang === 'en' ? '/en/about' : '/about'} class="nav-link">{tr.nav.about}</a>
+			<a href={lang === 'en' ? '/en/shops' : '/shops'} class="nav-link">{tr.nav.list}</a>
+			<button class="lang-btn" on:click={switchLang} aria-label="Switch language">
+				{lang === 'ja' ? 'EN' : '日本語'}
+			</button>
 		</nav>
 	</header>
 
@@ -31,10 +66,10 @@
 
 	<footer class="app-footer">
 		<nav class="footer-nav">
-			<a href="/about" class="footer-link">サービスについて</a>
-			<a href="/privacy" class="footer-link">プライバシーポリシー</a>
+			<a href={lang === 'en' ? '/en/about' : '/about'} class="footer-link">{tr.footer.about}</a>
+			<a href={lang === 'en' ? '/en/privacy' : '/privacy'} class="footer-link">{tr.footer.privacy}</a>
 		</nav>
-		<p class="footer-copy">&copy; 2026 二郎マップ</p>
+		<p class="footer-copy">&copy; 2026 {tr.siteTitle}</p>
 	</footer>
 </div>
 
@@ -105,6 +140,7 @@
 	.nav {
 		display: flex;
 		gap: 4px;
+		align-items: center;
 	}
 
 	.nav-link {
@@ -119,6 +155,24 @@
 
 	.nav-link:hover {
 		background: rgba(255, 255, 255, 0.2);
+		color: #fff;
+	}
+
+	.lang-btn {
+		color: rgba(255, 255, 255, 0.9);
+		background: rgba(255, 255, 255, 0.15);
+		border: 1px solid rgba(255, 255, 255, 0.4);
+		font-size: 13px;
+		font-weight: 600;
+		padding: 4px 10px;
+		border-radius: 6px;
+		cursor: pointer;
+		transition: background 0.15s;
+		white-space: nowrap;
+	}
+
+	.lang-btn:hover {
+		background: rgba(255, 255, 255, 0.3);
 		color: #fff;
 	}
 

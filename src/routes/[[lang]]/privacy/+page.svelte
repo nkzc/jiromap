@@ -1,9 +1,124 @@
+<script lang="ts">
+	import type { PageData } from './$types';
+
+	export let data: PageData;
+	$: lang = data.lang;
+</script>
+
 <svelte:head>
-	<title>プライバシーポリシー | 二郎マップ</title>
-	<meta name="description" content="二郎マップのプライバシーポリシー。Cookie・位置情報・広告の取り扱いについて説明します。" />
-	<meta name="robots" content="index, follow" />
+	{#if lang === 'en'}
+		<title>Privacy Policy | Jiro Map</title>
+		<meta name="description" content="Privacy Policy for Jiro Map. How we handle cookies, location data, and advertising." />
+		<meta name="robots" content="index, follow" />
+	{:else}
+		<title>プライバシーポリシー | 二郎マップ</title>
+		<meta name="description" content="二郎マップのプライバシーポリシー。Cookie・位置情報・広告の取り扱いについて説明します。" />
+		<meta name="robots" content="index, follow" />
+	{/if}
 </svelte:head>
 
+{#if lang === 'en'}
+<div class="policy-page">
+	<div class="policy-inner">
+		<h1 class="policy-title">Privacy Policy</h1>
+		<p class="policy-date">Last updated: May 2, 2026</p>
+
+		<section class="policy-section">
+			<h2>1. Introduction</h2>
+			<p>
+				Jiro Map (the "Service") respects your privacy and is committed to protecting your personal information.
+				This policy explains what information the Service collects and how it is used.
+			</p>
+		</section>
+
+		<section class="policy-section">
+			<h2>2. Information We Collect</h2>
+
+			<h3>2-1. Location Data</h3>
+			<p>
+				The Service may use your browser's Geolocation API to obtain your current location in order to show
+				nearby Ramen Jiro shops. Location data is processed only in your browser and is never stored on our servers.
+				Providing location data is optional; if you decline, shops will be shown based on central Tokyo.
+			</p>
+
+			<h3>2-2. Crowdsourced Status Reports (UGC)</h3>
+			<p>
+				When a user submits a crowd status report, only a SHA-256 hash of their IP address is stored on the server
+				for spam prevention. Raw IP addresses are never stored.
+				The content of submissions (crowd level, comments) is stored in our database.
+			</p>
+
+			<h3>2-3. Cookies and Local Storage</h3>
+			<p>
+				The Service uses cookies for the following purposes:
+			</p>
+			<ul>
+				<li>Advertising delivery via Google AdSense (see "About Advertising" below)</li>
+				<li>Session management to prevent duplicate submissions (valid for 30 minutes)</li>
+				<li>Storing your language preference (valid for 1 year)</li>
+			</ul>
+		</section>
+
+		<section class="policy-section">
+			<h2>3. About Advertising (Google AdSense)</h2>
+			<p>
+				This Service uses Google AdSense, an advertising service provided by Google LLC.
+				Google AdSense may use cookies to collect information about your past website visits in order to
+				display ads based on your interests.
+			</p>
+			<p>
+				If you do not wish to receive personalized ads, you can opt out via
+				<a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">
+					Google Ad Settings
+				</a>.
+				Alternatively, visit
+				<a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer">
+					aboutads.info
+				</a>
+				to disable interest-based advertising cookies from third-party vendors.
+			</p>
+			<p>
+				For more information, please refer to the
+				<a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
+					Google Privacy Policy
+				</a>.
+			</p>
+		</section>
+
+		<section class="policy-section">
+			<h2>4. Analytics</h2>
+			<p>
+				We may introduce analytics tools in the future. If we do, this policy will be updated and users will be notified.
+			</p>
+		</section>
+
+		<section class="policy-section">
+			<h2>5. Sharing Information with Third Parties</h2>
+			<p>
+				We do not share collected information with third parties except as required by law or with the user's consent.
+			</p>
+		</section>
+
+		<section class="policy-section">
+			<h2>6. Changes to This Policy</h2>
+			<p>
+				This policy may be updated from time to time. For significant changes, we will notify users within the Service.
+				Continued use of the Service after changes constitutes acceptance of the updated policy.
+			</p>
+		</section>
+
+		<section class="policy-section">
+			<h2>7. Contact</h2>
+			<p>
+				For inquiries regarding this policy, please contact us at:
+			</p>
+			<p>
+				Email: <a href="mailto:ckzc007@gmail.com">ckzc007@gmail.com</a>
+			</p>
+		</section>
+	</div>
+</div>
+{:else}
 <div class="policy-page">
 	<div class="policy-inner">
 		<h1 class="policy-title">プライバシーポリシー</h1>
@@ -43,6 +158,7 @@
 			<ul>
 				<li>Google AdSense による広告配信（詳細は「広告について」の項をご覧ください）</li>
 				<li>スパム投稿防止のためのセッション管理（有効期間: 30分）</li>
+				<li>言語設定の保存（有効期間: 1年）</li>
 			</ul>
 		</section>
 
@@ -110,6 +226,7 @@
 		</section>
 	</div>
 </div>
+{/if}
 
 <style>
 	.policy-page {

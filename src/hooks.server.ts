@@ -1,3 +1,4 @@
+import { redirect } from '@sveltejs/kit';
 import type { Handle } from '@sveltejs/kit';
 import type { D1Database, KVNamespace } from '@cloudflare/workers-types';
 import { getWaitLevelLabel } from '$lib/wait-level';
@@ -88,9 +89,39 @@ export async function runBatchAggregation(db: D1Database, kv: KVNamespace): Prom
 }
 
 // ──────────────────────────────────────────────
-// SvelteKit handle hook (pass-through)
+// SvelteKit handle hook — language redirect
 // ──────────────────────────────────────────────
 export const handle: Handle = async ({ event, resolve }) => {
+	const { pathname } = event.url;
+
+	// API・静的ファイル等はスキップ
+	if (
+		pathname.startsWith('/api/') ||
+		pathname.startsWith('/sitemap') ||
+		pathname.startsWith('/google')
+	) {
+		return resolve(event);
+	}
+
+	// /ja/... → /... へリダイレクト（ja はデフォルトなのでプレフィックス不要）
+	if (pathname === '/ja' || pathname.startsWith('/ja/')) {
+		const newPath = pathname.replace(/^\/ja/, '') || '/';
+		throw redirect(302, newPath);
+	}
+
+	// 日本語パス（/en/ でない）へのアクセスで言語判定
+	if (!pathname.startsWith('/en')) {
+		const langCookie = event.cookies.get('lang');
+		if (langCookie === 'en') {
+			throw redirect(302, '/en' + (pathname === '/' ? '' : pathname));
+		} else if (!langCookie) {
+			const country = event.request.headers.get('cf-ipcountry');
+			if (country && country !== 'JP') {
+				throw redirect(302, '/en' + (pathname === '/' ? '' : pathname));
+			}
+		}
+	}
+
 	return resolve(event);
 };
 

@@ -1,4 +1,4 @@
-﻿<script lang="ts">
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import WaitLevelBadge from '$lib/components/WaitLevelBadge.svelte';
 	import AdBanner from '$lib/components/AdBanner.svelte';
@@ -6,6 +6,12 @@
 	import { MOCK_SHOPS } from '$lib/mock-data.js';
 	import { radiusKm } from '$lib/stores.js';
 	import type { Shop } from '$lib/types.js';
+	import { t } from '$lib/i18n.js';
+	import type { PageData } from './$types';
+
+	export let data: PageData;
+	$: lang = data.lang;
+	$: tr = t[lang];
 
 	const TOKYO_CENTER = { lat: 35.6585, lng: 139.7454 };
 
@@ -44,35 +50,43 @@
 </script>
 
 <svelte:head>
-	<title>二郎店舗一覧 | 二郎マップ</title>
-	<meta name="description" content="現在地周辺のラーメン二郎の店舗を一覧で確認。近い順に表示。" />
-	<meta property="og:title" content="二郎マップ — 現在地から二郎を探す" />
-	<meta property="og:description" content="ラーメン二郎の店舗を地図で探せるサービス。" />
+	{#if lang === 'en'}
+		<title>Jiro Shop List | Jiro Map</title>
+		<meta name="description" content="List of Ramen Jiro locations near you, sorted by distance." />
+		<meta property="og:title" content="Jiro Map — Nearby Jiro Shops" />
+		<meta property="og:description" content="Find Ramen Jiro locations near you." />
+		<meta property="og:url" content="https://jiromap.pages.dev/en/shops" />
+	{:else}
+		<title>二郎店舗一覧 | 二郎マップ</title>
+		<meta name="description" content="現在地周辺のラーメン二郎の店舗を一覧で確認。近い順に表示。" />
+		<meta property="og:title" content="二郎マップ — 現在地から二郎を探す" />
+		<meta property="og:description" content="ラーメン二郎の店舗を地図で探せるサービス。" />
+		<meta property="og:url" content="https://jiromap.pages.dev/shops" />
+	{/if}
 	<meta property="og:type" content="website" />
-	<meta property="og:url" content="https://jiromap.pages.dev/shops" />
 	<meta property="og:image" content="https://jiromap.pages.dev/ogp.png" />
 	<meta name="twitter:card" content="summary_large_image" />
 </svelte:head>
 
 <div class="shops-page">
-	<p class="page-intro">現在地周辺のラーメン二郎直系店舗を近い順に表示しています。赤いピンが営業中、グレーが閉店・定休日の目安です。</p>
+	<p class="page-intro">{tr.shops.intro}</p>
 	<div class="page-header">
-		<h1 class="page-title">周辺の二郎</h1>
-		<span class="radius-badge">{$radiusKm}km圏内</span>
+		<h1 class="page-title">{tr.shops.pageTitle}</h1>
+		<span class="radius-badge">{$radiusKm}{tr.shops.within}</span>
 		{#if !loading}
-			<span class="shop-count">{shops.length}件</span>
+			<span class="shop-count">{shops.length}{lang === 'en' ? ' shops' : '件'}</span>
 		{/if}
 	</div>
 
 	{#if loading}
-		<div class="loading">読み込み中...</div>
+		<div class="loading">{tr.shops.loading}</div>
 	{:else if shops.length === 0}
-		<div class="empty">周辺に店舗が見つかりませんでした</div>
+		<div class="empty">{tr.shops.empty}</div>
 	{:else}
 		<ul class="shop-list">
 			{#each shops as shop, i}
 				<li class="shop-item">
-					<a href="/shops/{shop.id}" class="shop-link">
+					<a href="{lang === 'en' ? '/en' : ''}/shops/{shop.id}" class="shop-link">
 						<div class="shop-info">
 							<div class="shop-name-row">
 								<span class="shop-icon">📍</span>
@@ -84,7 +98,9 @@
 									level={shop.status?.current_wait_level}
 									label={shop.status?.wait_level_label}
 								/>
-								<span class="shop-category">{shop.category === 'jiro' ? '二郎' : 'インスパイア'}</span>
+								<span class="shop-category">
+									{shop.category === 'jiro' ? tr.shopDetail.jiro : tr.shopDetail.inspire}
+								</span>
 							</div>
 							{#if shop.business_hours}
 								<p class="shop-hours">{shop.business_hours}</p>

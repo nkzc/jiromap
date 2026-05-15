@@ -1,4 +1,4 @@
-﻿<script lang="ts">
+<script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 	import Map from '$lib/components/Map.svelte';
 	import ShopCard from '$lib/components/ShopCard.svelte';
@@ -8,6 +8,12 @@
 	import { RADIUS_MIN_KM, RADIUS_MAX_KM, RADIUS_STEP_KM } from '$lib/config.js';
 	import type { Shop } from '$lib/types.js';
 	import { buildWebsiteJsonLd } from '$lib/seo.js';
+	import { t } from '$lib/i18n.js';
+	import type { PageData } from './$types';
+
+	export let data: PageData;
+	$: lang = data.lang;
+	$: tr = t[lang];
 
 	const websiteJsonLd = buildWebsiteJsonLd();
 
@@ -141,8 +147,10 @@
 		clearTimeout(radiusDebounceTimer);
 		radiusDebounceTimer = setTimeout(() => {
 			clearInterval(pollTimer);
-			loadShops(mapMode === 'map' ? mapCenterLat : currentLat,
-			          mapMode === 'map' ? mapCenterLng : currentLng);
+			loadShops(
+				mapMode === 'map' ? mapCenterLat : currentLat,
+				mapMode === 'map' ? mapCenterLng : currentLng
+			);
 			pollTimer = setInterval(pollTick, POLL_INTERVAL);
 		}, 300);
 	}
@@ -154,19 +162,26 @@
 </script>
 
 <svelte:head>
-	<title>二郎マップ — 現在地周辺のラーメン二郎を地図で探す</title>
-	<meta name="description" content="現在地周辺のラーメン二郎の店舗を地図で探せます。営業時間・アクセス・頼み方ガイドも確認できます。" />
-	<meta property="og:title" content="二郎マップ — 現在地から二郎を探す" />
-	<meta property="og:description" content="ラーメン二郎の店舗を地図で探せるサービス。現在地から近い順に表示。" />
+	{#if lang === 'en'}
+		<title>Jiro Map — Find Ramen Jiro Near You</title>
+		<meta name="description" content="Find Ramen Jiro locations near you on a map. Check business hours, access info, and which shops are open right now." />
+		<meta property="og:title" content="Jiro Map — Find Ramen Jiro Near You" />
+		<meta property="og:description" content="Find Ramen Jiro locations on a map. Sorted by distance from your current location." />
+	{:else}
+		<title>二郎マップ — 現在地周辺のラーメン二郎を地図で探す</title>
+		<meta name="description" content="現在地周辺のラーメン二郎の店舗を地図で探せます。営業時間・アクセス・頼み方ガイドも確認できます。" />
+		<meta property="og:title" content="二郎マップ — 現在地から二郎を探す" />
+		<meta property="og:description" content="ラーメン二郎の店舗を地図で探せるサービス。現在地から近い順に表示。" />
+	{/if}
 	<meta property="og:type" content="website" />
-	<meta property="og:url" content="https://jiromap.pages.dev/" />
+	<meta property="og:url" content="https://jiromap.pages.dev{lang === 'en' ? '/en' : '/'}" />
 	<meta property="og:image" content="https://jiromap.pages.dev/ogp.png" />
 	<meta name="twitter:card" content="summary_large_image" />
 	{@html `<script type="application/ld+json">${websiteJsonLd}</script>`}
 </svelte:head>
 
 <div class="page">
-	<p class="tagline">直系二郎を地図で検索 · 営業中かを確認</p>
+	<p class="tagline">{tr.tagline}</p>
 	<div class="map-wrap">
 		<Map
 			bind:this={mapComponent}
@@ -193,7 +208,7 @@
 				bind:value={$radiusKm}
 				on:input={onRadiusChange}
 				class="radius-slider"
-				aria-label="検索範囲"
+				aria-label={lang === 'en' ? 'Search radius' : '検索範囲'}
 			/>
 			<span class="radius-value">{$radiusKm}km</span>
 		</div>
@@ -203,9 +218,9 @@
 			class="mode-btn"
 			class:active={mapMode === 'map'}
 			on:click={toggleMapMode}
-			aria-label="検索モード切替"
+			aria-label={lang === 'en' ? 'Toggle search mode' : '検索モード切替'}
 		>
-			{mapMode === 'gps' ? '現在地' : '地図中心'}
+			{mapMode === 'gps' ? tr.map.currentMode : tr.map.mapMode}
 		</button>
 
 		<!-- Locate button -->
@@ -217,7 +232,7 @@
 		</button>
 
 		{#if loading}
-			<div class="loading-badge">読み込み中...</div>
+			<div class="loading-badge">{tr.map.loading}</div>
 		{/if}
 	</div>
 
@@ -225,7 +240,7 @@
 	{#if selectedShop}
 		<div class="side-panel">
 			<ShopCard shop={selectedShop} />
-			<button class="panel-close" on:click={closePanel} aria-label="閉じる">&times;</button>
+			<button class="panel-close" on:click={closePanel} aria-label={lang === 'en' ? 'Close' : '閉じる'}>&times;</button>
 		</div>
 	{/if}
 </div>

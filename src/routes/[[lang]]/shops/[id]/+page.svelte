@@ -5,10 +5,13 @@
 	import { WAIT_LEVEL_LABELS } from '$lib/wait-level.js';
 	import { buildRestaurantJsonLd } from '$lib/seo.js';
 	import { buildTabelogUrl } from '$lib/affiliate.js';
+	import { t } from '$lib/i18n.js';
 	import type { Report } from '$lib/types.js';
 
 	export let data: PageData;
 
+	$: lang = data.lang;
+	$: tr = t[lang];
 	$: shop = data.shop;
 	$: recentReports = (data.recentReports as Report[]) ?? [];
 
@@ -16,11 +19,11 @@
 		if (!isoString) return '';
 		const diff = Date.now() - new Date(isoString).getTime();
 		const minutes = Math.floor(diff / 60000);
-		if (minutes < 1) return 'たった今';
-		if (minutes < 60) return `${minutes}分前`;
+		if (minutes < 1) return tr.shopDetail.justNow;
+		if (minutes < 60) return `${minutes}${tr.shopDetail.minutesAgo}`;
 		const hours = Math.floor(minutes / 60);
-		if (hours < 24) return `${hours}時間前`;
-		return `${Math.floor(hours / 24)}日前`;
+		if (hours < 24) return `${hours}${tr.shopDetail.hoursAgo}`;
+		return `${Math.floor(hours / 24)}${tr.shopDetail.daysAgo}`;
 	}
 
 	function openInMaps() {
@@ -32,44 +35,53 @@
 	$: confidenceLabel =
 		shop?.status?.confidence != null
 			? shop.status.confidence >= 0.8
-				? '高信頼度'
+				? tr.shopDetail.highConf
 				: shop.status.confidence >= 0.5
-					? '中信頼度'
-					: '低信頼度'
+					? tr.shopDetail.midConf
+					: tr.shopDetail.lowConf
 			: '';
 
 	$: tabelogUrl = shop ? buildTabelogUrl(shop.tabelog_url ?? null) : null;
 	$: restaurantJsonLd = shop ? buildRestaurantJsonLd(shop) : null;
+	$: backHref = lang === 'en' ? '/en/shops' : '/shops';
 </script>
 
 <svelte:head>
 	{#if shop}
-		<title>{shop.name}の混雑状況・並び時間 | 二郎マップ</title>
-		<meta name="description" content="{shop.name}（{shop.address}）のリアルタイム混雑状況・営業時間・アクセス情報。" />
-		<meta property="og:title" content="{shop.name} — 二郎マップ" />
-		<meta property="og:description" content="{shop.name}の今の混雑状況を確認" />
+		{#if lang === 'en'}
+			<title>{shop.name} — Hours & Status | Jiro Map</title>
+			<meta name="description" content="{shop.name} ({shop.address}) — real-time status, hours, and access info." />
+			<meta property="og:title" content="{shop.name} — Jiro Map" />
+			<meta property="og:description" content="Check current status of {shop.name}" />
+			<meta property="og:url" content="https://jiromap.pages.dev/en/shops/{shop.id}" />
+		{:else}
+			<title>{shop.name}の混雑状況・並び時間 | 二郎マップ</title>
+			<meta name="description" content="{shop.name}（{shop.address}）のリアルタイム混雑状況・営業時間・アクセス情報。" />
+			<meta property="og:title" content="{shop.name} — 二郎マップ" />
+			<meta property="og:description" content="{shop.name}の今の混雑状況を確認" />
+			<meta property="og:url" content="https://jiromap.pages.dev/shops/{shop.id}" />
+		{/if}
 		<meta property="og:type" content="restaurant" />
-		<meta property="og:url" content="https://jiromap.pages.dev/shops/{shop.id}" />
 		<meta property="og:image" content="https://jiromap.pages.dev/ogp.png" />
 		<meta name="twitter:card" content="summary_large_image" />
 		{#if restaurantJsonLd}
 			{@html `<script type="application/ld+json">${restaurantJsonLd}</script>`}
 		{/if}
 	{:else}
-		<title>店舗詳細 — 二郎マップ</title>
+		<title>{lang === 'en' ? 'Shop Detail — Jiro Map' : '店舗詳細 — 二郎マップ'}</title>
 	{/if}
 </svelte:head>
 
 <div class="detail-page">
 	{#if !shop}
 		<div class="not-found">
-			<p>店舗が見つかりませんでした</p>
-			<a href="/shops" class="back-link">← 一覧に戻る</a>
+			<p>{tr.shopDetail.notFound}</p>
+			<a href={backHref} class="back-link">{tr.shopDetail.backToList}</a>
 		</div>
 	{:else}
 		<!-- Header -->
 		<div class="page-header">
-			<a href="/shops" class="back-btn" aria-label="一覧に戻る">←</a>
+			<a href={backHref} class="back-btn" aria-label={tr.shopDetail.backToList}>{tr.shopDetail.back}</a>
 			<h1 class="shop-title">{shop.name}</h1>
 		</div>
 
@@ -85,10 +97,10 @@
 				{/if}
 			</div>
 			{#if shop.status?.report_count}
-				<p class="meta-text">{shop.status.report_count}件の報告</p>
+				<p class="meta-text">{shop.status.report_count}{tr.shopDetail.reportsCount}</p>
 			{/if}
 			{#if shop.status?.last_reported_at}
-				<p class="meta-text">最終更新: {formatRelativeTime(shop.status.last_reported_at)}</p>
+				<p class="meta-text">{tr.shopDetail.lastUpdated} {formatRelativeTime(shop.status.last_reported_at)}</p>
 			{/if}
 		</section>
 
@@ -97,31 +109,31 @@
 			<dl class="info-list">
 				{#if shop.address}
 					<div class="info-row">
-						<dt>住所</dt>
+						<dt>{tr.shopDetail.address}</dt>
 						<dd>{shop.address}</dd>
 					</div>
 				{/if}
 				{#if shop.nearest_station}
 					<div class="info-row">
-						<dt>最寄駅</dt>
+						<dt>{tr.shopDetail.station}</dt>
 						<dd>{shop.nearest_station}</dd>
 					</div>
 				{/if}
 				{#if shop.business_hours}
 					<div class="info-row">
-						<dt>営業時間</dt>
+						<dt>{tr.shopDetail.hours}</dt>
 						<dd>{shop.business_hours}</dd>
 					</div>
 				{/if}
 				{#if shop.closed_days}
 					<div class="info-row">
-						<dt>定休日</dt>
+						<dt>{tr.shopDetail.closedDays}</dt>
 						<dd>{shop.closed_days}</dd>
 					</div>
 				{/if}
 				<div class="info-row">
-					<dt>カテゴリ</dt>
-					<dd>{shop.category === 'jiro' ? '二郎' : 'インスパイア系'}</dd>
+					<dt>{tr.shopDetail.category}</dt>
+					<dd>{shop.category === 'jiro' ? tr.shopDetail.jiro : tr.shopDetail.inspire}</dd>
 				</div>
 			</dl>
 		</section>
@@ -129,35 +141,35 @@
 		<!-- Rules -->
 		{#if shop.queue_notes || shop.topping_notes || shop.shop_notes}
 			<section class="card rules-card">
-				<h2 class="section-title">この店のルール</h2>
+				<h2 class="section-title">{tr.shopDetail.rules}</h2>
 				<dl class="info-list">
 					{#if shop.queue_notes}
 						<div class="info-row">
-							<dt>並び方</dt>
+							<dt>{tr.shopDetail.queue}</dt>
 							<dd>{shop.queue_notes}</dd>
 						</div>
 					{/if}
 					{#if shop.topping_notes}
 						<div class="info-row">
-							<dt>トッピング</dt>
+							<dt>{tr.shopDetail.topping}</dt>
 							<dd>{shop.topping_notes}</dd>
 						</div>
 					{/if}
 					{#if shop.shop_notes}
 						<div class="info-row">
-							<dt>その他</dt>
+							<dt>{tr.shopDetail.other}</dt>
 							<dd>{shop.shop_notes}</dd>
 						</div>
 					{/if}
 				</dl>
-				<p class="rules-note">※ 参考情報です。実際のルールは店舗にてご確認ください。</p>
+				<p class="rules-note">{tr.shopDetail.rulesNote}</p>
 			</section>
 		{/if}
 
 		<!-- Recent reports -->
 		{#if recentReports.length > 0}
 			<section class="card">
-				<h2 class="section-title">直近の投稿</h2>
+				<h2 class="section-title">{tr.shopDetail.recentReports}</h2>
 				<ul class="report-list">
 					{#each recentReports as report}
 						<li class="report-item">
@@ -184,13 +196,13 @@
 		<section class="card links-card">
 			{#if tabelogUrl}
 				<a href={tabelogUrl} target="_blank" rel="noopener noreferrer sponsored" class="ext-link tabelog">
-					食べログで見る <span class="pr-label">PR</span>
+					{tr.shopDetail.tabelogLink} <span class="pr-label">PR</span>
 				</a>
 			{:else}
-				<span class="ext-link tabelog ext-link--placeholder">食べログ（PR）</span>
+				<span class="ext-link tabelog ext-link--placeholder">{lang === 'en' ? 'Tabelog (PR)' : '食べログ（PR）'}</span>
 			{/if}
 			<button class="ext-link maps" on:click={openInMaps}>
-				地図アプリで開く
+				{tr.shopDetail.mapsLink}
 			</button>
 		</section>
 	{/if}
