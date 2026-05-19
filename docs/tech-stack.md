@@ -98,18 +98,23 @@
 
 ---
 
-### Leaflet + OpenStreetMap
+### Leaflet + OpenStreetMap / Carto Voyager
 
 **役割**: 地図表示とマーカー描画。
 
 **なぜ Leaflet か**
 - 完全無料（Google Maps は月 200 ドルの無料枠を超えると課金）
-- OpenStreetMap のタイルも無料（属性表示が必要）
+- OpenStreetMap・Carto Voyager のタイルも無料（属性表示が必要）
 - SSR 非対応のため `onMount` 内で動的 import する実装パターンが必要
+
+**タイル切り替え**
+- 日本語（`lang === 'ja'`）: OpenStreetMap タイル（`tile.openstreetmap.org`）
+- 英語（`lang === 'en'`）: Carto Voyager タイル（`basemaps.cartocdn.com`）— 英語ラベルで海外ユーザーに最適化
 
 **注意点**
 - Leaflet の CSS は CDN から読み込む（`app.html` の `<link rel="preload">`）
 - Vite ビルド時にデフォルトアイコンのパスが壊れるため `Icon.Default.mergeOptions` で上書きが必要
+- `app.html` に `basemaps.cartocdn.com` の `preconnect` / `dns-prefetch` を追加済み
 
 ---
 

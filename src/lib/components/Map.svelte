@@ -16,6 +16,7 @@
 	export let circleLat: number = 0;
 	export let circleLng: number = 0;
 	export let mapMode: 'gps' | 'map' = 'gps';
+	export let lang: string = 'ja';
 
 	let mapEl: HTMLDivElement;
 	let map: LeafletMap | null = null;
@@ -135,9 +136,17 @@
 		// Zoom control at bottom-right (avoids hamburger menu on mobile)
 		L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-		// OpenStreetMap tiles
-		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-			attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+		// Tile layer: OpenStreetMap for Japanese, Carto Voyager for others
+		const isJa = lang === 'ja';
+		const tileUrl = isJa
+			? 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+			: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+		const attribution = isJa
+			? '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+			: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
+
+		L.tileLayer(tileUrl, {
+			attribution,
 			maxZoom: 19
 		}).addTo(map);
 

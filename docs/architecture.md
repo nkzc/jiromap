@@ -55,6 +55,7 @@ jiro/
 │   │       ├── Map.svelte          # Leaflet 地図（SSR 非対応, onMount で動的 import）
 │       │                       #   props: userLat/userLng — 現在地ピン（青ドット）表示
 │       │                       #   props: onMapMove — moveend イベントで地図中心座標を通知
+│       │                       #   props: lang — 'ja' のとき OpenStreetMap タイル、'en' のとき Carto Voyager タイルを使用
 │   │       ├── ShopCard.svelte     # 店舗カード（地図のポップアップ）
 │       │                       #   「ルートを見る」= Google Maps directions 外部リンク
 │   │       ├── WaitLevelBadge.svelte # 混雑レベルバッジ

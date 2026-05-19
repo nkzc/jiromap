@@ -25,7 +25,7 @@ Google AdSense・アフィリエイトによる収益化が主目的。
 | バッチ | Cloudflare Worker（jiromap-cron・1分ごと） |
 | DB | Cloudflare D1（jiromap・ID: `5c2500bc-4980-4db5-ae3f-1f2d235f8627`） |
 | キャッシュ | Cloudflare KV（JIROMAP_KV・ID: `6c77505c53334764b12aeb5bafa3d991`） |
-| 地図 | Leaflet + OpenStreetMap |
+| 地図 | Leaflet + OpenStreetMap（ja）/ Carto Voyager（en） |
 | 広告 | Google AdSense（`ca-pub-4102046917046088`） |
 
 ## 開発環境ルール
