@@ -1,4 +1,4 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import type { PageData } from './$types';
 
 	export let data: PageData;
@@ -38,6 +38,15 @@
 		<h2 class="section-title">What is Ramen Jiro?</h2>
 		<p>Ramen Jiro is a ramen chain founded in 1968 in Mita, Tokyo. Known for its thick tonkotsu-soy broth, extra-thick noodles, mountains of bean sprouts and cabbage, and large slabs of pork (called "buta"), it has built a cult following among fans known as "Jiro-rians".</p>
 		<p>There are about 50 direct-lineage shops nationwide. Each is run by a master trained at the original shop, maintaining the Jiro style while adding their own character. The "call" culture — telling staff your preferences for vegetables, garlic, fat, and soy sauce — is unique to Jiro.</p>
+		<figure class="jiro-photo">
+			<img
+				src="/jiro.jpg"
+				alt="Ramen Jiro Mita main store - large bowl with all toppings maxed out"
+				loading="lazy"
+				class="jiro-img"
+			/>
+			<figcaption class="jiro-caption">A large bowl from the Mita main store &mdash; the original Ramen Jiro location &mdash; ordered &ldquo;zenmasimashi&rdquo; (all toppings maxed out): extra bean sprouts, garlic, back fat, and soy sauce. This is Jiro at its most iconic.</figcaption>
+		</figure>
 	</section>
 
 	<section class="section">
@@ -109,6 +118,15 @@
 		<h2 class="section-title">ラーメン二郎とは</h2>
 		<p>ラーメン二郎は1968年に東京・三田で創業した、独自のスタイルを持つラーメンです。豚骨醤油ベースの濃厚なスープ、極太麺、大量の野菜（モヤシ・キャベツ）、大きな豚肉（通称「豚」）が特徴で、そのボリュームと個性的な味が熱狂的なファン「ジロリアン」を生み出しています。</p>
 		<p>直系店舗は全国で約50店舗。本店から暖簾分けを受けた店主がそれぞれ運営しており、基本スタイルを継承しつつも店ごとに異なる個性を持ちます。注文時に野菜・ニンニク・背脂・醤油の量を伝える「コール」と呼ばれる文化も二郎ならではです。</p>
+		<figure class="jiro-photo">
+			<img
+				src="/jiro.jpg"
+				alt="ラーメン二郎 三田本店 大ラーメン 全マシマシ"
+				loading="lazy"
+				class="jiro-img"
+			/>
+			<figcaption class="jiro-caption">三田本店の大ラーメン、コール「全マシマシ」。ヤサイ・ニンニク・アブラ・カラメすべて増量した、二郎の真骨頂とも言える一杯。</figcaption>
+		</figure>
 	</section>
 
 	<section class="section">
@@ -248,5 +266,22 @@
 		font-size: 14px;
 		line-height: 1.7;
 		color: var(--color-text, #1f2937);
+	}
+
+	.jiro-photo {
+		margin: 16px 0 0;
+	}
+
+	.jiro-img {
+		width: 100%;
+		border-radius: 8px;
+		display: block;
+	}
+
+	.jiro-caption {
+		font-size: 12px;
+		line-height: 1.6;
+		color: var(--color-muted, #6b7280);
+		margin-top: 6px;
 	}
 </style>
