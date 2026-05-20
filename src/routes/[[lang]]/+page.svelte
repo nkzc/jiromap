@@ -1,413 +1,326 @@
 <script lang="ts">
-	import { onMount, onDestroy } from 'svelte';
-	import Map from '$lib/components/Map.svelte';
-	import ShopCard from '$lib/components/ShopCard.svelte';
-	import { fetchNearbyShops } from '$lib/api.js';
-	import { MOCK_SHOPS } from '$lib/mock-data.js';
-	import { radiusKm } from '$lib/stores.js';
-	import { RADIUS_MIN_KM, RADIUS_MAX_KM, RADIUS_STEP_KM } from '$lib/config.js';
-	import type { Shop } from '$lib/types.js';
-	import { buildWebsiteJsonLd } from '$lib/seo.js';
-	import { t } from '$lib/i18n.js';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
 	$: lang = data.lang;
-	$: tr = t[lang];
-
-	const websiteJsonLd = buildWebsiteJsonLd();
-
-	const TOKYO_CENTER = { lat: 35.6585, lng: 139.7454 };
-	const POLL_INTERVAL = 30000;
-
-	let shops: Shop[] = [];
-	let currentLat = TOKYO_CENTER.lat;
-	let currentLng = TOKYO_CENTER.lng;
-	let userLat: number | null = null;
-	let userLng: number | null = null;
-	let selectedShop: Shop | null = null;
-	let loading = false;
-	let error = '';
-	let pollTimer: ReturnType<typeof setInterval>;
-	let radiusDebounceTimer: ReturnType<typeof setTimeout>;
-	let mapComponent: Map;
-	let mapMode: 'gps' | 'map' = 'gps';
-	let mapCenterLat = currentLat;
-	let mapCenterLng = currentLng;
-
-	async function loadShops(lat: number, lng: number) {
-		loading = true;
-		error = '';
-		try {
-			shops = await fetchNearbyShops(lat, lng, $radiusKm * 1000);
-		} catch {
-			// API unavailable (e.g. Vite dev mode) – fall back to mock data
-			shops = MOCK_SHOPS;
-		} finally {
-			loading = false;
-		}
-	}
-
-	function handleShopClick(shop: Shop) {
-		selectedShop = shop;
-	}
-
-	function closePanel() {
-		selectedShop = null;
-	}
-
-	function handleMapMove(lat: number, lng: number) {
-		mapCenterLat = lat;
-		mapCenterLng = lng;
-		if (mapMode === 'map') {
-			loadShops(lat, lng);
-		}
-	}
-
-	function toggleMapMode() {
-		mapMode = mapMode === 'gps' ? 'map' : 'gps';
-		if (mapMode === 'map') {
-			loadShops(mapCenterLat, mapCenterLng);
-		} else {
-			mapCenterLat = currentLat;
-			mapCenterLng = currentLng;
-			loadShops(currentLat, currentLng);
-		}
-	}
-
-	function locateUser() {
-		if ('geolocation' in navigator) {
-			navigator.geolocation.getCurrentPosition(
-				(pos) => {
-					currentLat = pos.coords.latitude;
-					currentLng = pos.coords.longitude;
-					userLat = pos.coords.latitude;
-					userLng = pos.coords.longitude;
-					mapComponent?.panTo(currentLat, currentLng);
-					loadShops(currentLat, currentLng);
-				},
-				() => {
-					loadShops(TOKYO_CENTER.lat, TOKYO_CENTER.lng);
-				},
-				{ timeout: 10000, maximumAge: 30000 }
-			);
-		}
-	}
-
-	onMount(() => {
-		// Initial load: try geolocation, fall back to Tokyo center
-		if ('geolocation' in navigator) {
-			navigator.geolocation.getCurrentPosition(
-				(pos) => {
-					currentLat = pos.coords.latitude;
-					currentLng = pos.coords.longitude;
-					userLat = pos.coords.latitude;
-					userLng = pos.coords.longitude;
-					mapComponent?.panTo(currentLat, currentLng);
-					loadShops(currentLat, currentLng);
-				},
-				() => {
-					loadShops(TOKYO_CENTER.lat, TOKYO_CENTER.lng);
-				},
-				{ timeout: 10000, maximumAge: 30000 }
-			);
-		} else {
-			loadShops(TOKYO_CENTER.lat, TOKYO_CENTER.lng);
-		}
-
-		// 30-second polling
-		pollTimer = setInterval(pollTick, POLL_INTERVAL);
-	});
-
-	function pollTick() {
-		if (mapMode === 'map') {
-			loadShops(mapCenterLat, mapCenterLng);
-			return;
-		}
-		if ('geolocation' in navigator) {
-			navigator.geolocation.getCurrentPosition(
-				(pos) => {
-					currentLat = pos.coords.latitude;
-					currentLng = pos.coords.longitude;
-					userLat = pos.coords.latitude;
-					userLng = pos.coords.longitude;
-					loadShops(currentLat, currentLng);
-				},
-				() => {
-					loadShops(currentLat, currentLng);
-				},
-				{ timeout: 5000, maximumAge: 30000 }
-			);
-		} else {
-			loadShops(currentLat, currentLng);
-		}
-	}
-
-	function onRadiusChange() {
-		clearTimeout(radiusDebounceTimer);
-		radiusDebounceTimer = setTimeout(() => {
-			clearInterval(pollTimer);
-			loadShops(
-				mapMode === 'map' ? mapCenterLat : currentLat,
-				mapMode === 'map' ? mapCenterLng : currentLng
-			);
-			pollTimer = setInterval(pollTick, POLL_INTERVAL);
-		}, 300);
-	}
-
-	onDestroy(() => {
-		clearInterval(pollTimer);
-		clearTimeout(radiusDebounceTimer);
-	});
 </script>
 
 <svelte:head>
 	{#if lang === 'en'}
-		<title>Jiro Map — Find Ramen Jiro Near You</title>
-		<meta name="description" content="Explore Ramen Jiro on a Tokyo ramen map. Find Japan ramen spots open now — check hours and get directions to all 48 direct-lineage locations." />
-		<meta property="og:title" content="Jiro Map — Find Ramen Jiro Near You" />
-		<meta property="og:description" content="Find Ramen Jiro locations on a map. Sorted by distance from your current location." />
+		<title>Jiro Map | Find Ramen Jiro Near You</title>
+		<meta name="description" content="Find Ramen Jiro locations near you on a map. Check open/closed status in real time across 48 direct-lineage shops in Japan." />
+		<meta property="og:title" content="Jiro Map | Find Ramen Jiro Near You" />
+		<meta property="og:url" content="https://jiromap.pages.dev/en" />
 	{:else}
-		<title>二郎マップ — 現在地周辺のラーメン二郎を地図で探す</title>
-		<meta name="description" content="現在地周辺のラーメン二郎の店舗を地図で探せます。営業時間・アクセス・頼み方ガイドも確認できます。" />
-		<meta property="og:title" content="二郎マップ — 現在地から二郎を探す" />
-		<meta property="og:description" content="ラーメン二郎の店舗を地図で探せるサービス。現在地から近い順に表示。" />
+		<title>二郎マップ | ラーメン二郎を地図で探す</title>
+		<meta name="description" content="現在地周辺のラーメン二郎の直系店舗を地図で探せます。営業中かどうかをリアルタイムで確認。二郎文化の解説も。" />
+		<meta property="og:title" content="二郎マップ | ラーメン二郎を地図で探す" />
+		<meta property="og:url" content="https://jiromap.pages.dev/" />
 	{/if}
 	<meta property="og:type" content="website" />
-	<meta property="og:url" content="https://jiromap.pages.dev{lang === 'en' ? '/en' : '/'}" />
 	<meta property="og:image" content="https://jiromap.pages.dev/ogp.png" />
 	<meta name="twitter:card" content="summary_large_image" />
-	{@html `<script type="application/ld+json">${websiteJsonLd}</script>`}
 </svelte:head>
 
-<div class="page">
-	<p class="tagline">{tr.tagline}</p>
-	<div class="map-wrap">
-		<Map
-			bind:this={mapComponent}
-			{shops}
-			centerLat={currentLat}
-			centerLng={currentLng}
-			{userLat}
-			{userLng}
-			onShopClick={handleShopClick}
-			onMapMove={handleMapMove}
-			{mapMode}
-			radiusM={$radiusKm * 1000}
-			circleLat={mapMode === 'map' ? mapCenterLat : (userLat ?? 0)}
-			circleLng={mapMode === 'map' ? mapCenterLng : (userLng ?? 0)}
-			{lang}
-		/>
+{#if lang === 'en'}
+<div class="about-page">
+	<section class="hero">
+		<h1>Find Ramen Jiro<br>Near You</h1>
+		<p>Real-time open/closed status for all 48 direct-lineage Jiro shops across Japan — shown as pins on a map.</p>
+		<a href={lang === 'en' ? '/en/map' : '/map'} class="cta-button">Open Map →</a>
+	</section>
 
-		<!-- Radius control -->
-		<div class="radius-control">
-			<input
-				type="range"
-				min={RADIUS_MIN_KM}
-				max={RADIUS_MAX_KM}
-				step={RADIUS_STEP_KM}
-				bind:value={$radiusKm}
-				on:input={onRadiusChange}
-				class="radius-slider"
-				aria-label={lang === 'en' ? 'Search radius' : '検索範囲'}
+	<section class="section">
+		<h2 class="section-title">What is Ramen Jiro?</h2>
+		<p>Ramen Jiro is a ramen chain founded in 1968 in Mita, Tokyo. Known for its thick tonkotsu-soy broth, extra-thick noodles, mountains of bean sprouts and cabbage, and large slabs of pork (called "buta"), it has built a cult following among fans known as "Jiro-rians".</p>
+		<p>There are about 50 direct-lineage shops nationwide. Each is run by a master trained at the original shop, maintaining the Jiro style while adding their own character. The "call" culture — telling staff your preferences for vegetables, garlic, fat, and soy sauce — is unique to Jiro.</p>
+		<figure class="jiro-photo">
+			<img
+				src="/jiro.jpg"
+				alt="Ramen Jiro Mita main store - large bowl with all toppings maxed out"
+				loading="lazy"
+				class="jiro-img"
 			/>
-			<span class="radius-value">{$radiusKm}km</span>
-		</div>
+			<figcaption class="jiro-caption">A large bowl from the Mita main store &mdash; the original Ramen Jiro location &mdash; ordered &ldquo;zenmasimashi&rdquo; (all toppings maxed out): extra bean sprouts, garlic, back fat, and soy sauce. This is Jiro at its most iconic.</figcaption>
+		</figure>
+	</section>
 
-		<!-- Mode toggle -->
-		<button
-			class="mode-btn"
-			class:active={mapMode === 'map'}
-			on:click={toggleMapMode}
-			aria-label={lang === 'en' ? 'Toggle search mode' : '検索モード切替'}
-		>
-			{mapMode === 'gps' ? tr.map.currentMode : tr.map.mapMode}
-		</button>
+	<section class="section">
+		<h2 class="section-title">"Ninniku Iremasuka?" — Do You Want Garlic?</h2>
+		<p>This phrase — heard in Ramen Jiro shops as the noodles finish cooking — has become one of the most iconic expressions in the Jiro world.</p>
+		<p>Its origins were entirely practical. At Jiro, multiple bowls are cooked in batches, leaving no natural moment for staff to take topping preferences until the very last second. Before this custom took hold, first-time customers often didn't know when to speak up. Some would try to call out their preferences at the start, only to be told "I'll ask you later" — leaving them flustered before they'd even taken a bite.</p>
+		<p>"Ninniku iremasuka?" was born to fix that confusion. By having staff ask the question at precisely the right moment, the exchange became smooth and predictable. Equally important: asking rather than assuming means customers who dislike garlic, or who have plans the next day, can simply say no without any awkwardness.</p>
+		<p>The custom has since spread to branch shops across Japan, but how and when the question is asked — and what options are offered — varies by location. "Ninniku iremasuka?" is one expression of a broader conversation that has evolved over decades.</p>
+	</section>
 
-		<!-- Locate button -->
-		<button class="locate-btn" on:click={locateUser} aria-label="現在地に移動">
-			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-				<circle cx="12" cy="12" r="3" />
-				<path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
-			</svg>
-		</button>
+	<section class="section">
+		<h2 class="section-title">Key Features</h2>
+		<ul class="feature-list">
+			<li>
+				<span class="feature-icon">📍</span>
+				<div>
+					<strong>Find Jiro Near You</strong>
+					<p>Uses GPS to get your current location and shows nearby direct-lineage shops as pins on a map. A <strong>blue semi-transparent circle</strong> shows the search radius around you. Adjust the range from 5–50km using the slider.</p>
+				</div>
+			</li>
+			<li>
+				<span class="feature-icon">🔴</span>
+				<div>
+					<strong>Pin Colors Show Status</strong>
+					<p>Shops likely to be open show as <strong>red pins</strong>; closed or holiday shops show as <strong>grey pins</strong>. Your current location is shown as a <strong>blue pin</strong>.</p>
+				</div>
+			</li>
+			<li>
+				<span class="feature-icon">🗺</span>
+				<div>
+					<strong>Map Center Mode</strong>
+					<p>Switch to "Map Center" mode to search based on wherever you scroll the map — great for planning trips or finding shops along a route. A <strong>green pin</strong> and green circle mark the search center.</p>
+				</div>
+			</li>
+			<li>
+				<span class="feature-icon">🧭</span>
+				<div>
+					<strong>Directions</strong>
+					<p>Tap a pin to open the shop card, then tap "Open in Maps" to get directions from your current location via Google Maps.</p>
+				</div>
+			</li>
+		</ul>
+	</section>
 
-		{#if loading}
-			<div class="loading-badge">{tr.map.loading}</div>
-		{/if}
-	</div>
+	<section class="section">
+		<h2 class="section-title">How to Use</h2>
+		<ol class="steps">
+			<li><strong>Allow location access</strong> — When you open the page, your browser will ask for location permission. Allow it to automatically show nearby shops.</li>
+			<li><strong>Check the red pins</strong> — Red pins indicate shops likely to be open. Grey pins are closed or on a regular holiday.</li>
+			<li><strong>Adjust the radius</strong> — Use the slider at the bottom of the screen to change the search range from 5–50km. Default is 10km.</li>
+			<li><strong>Tap a pin for details</strong> — The shop card shows hours, nearest station, and a button to open directions.</li>
+		</ol>
+	</section>
 
-	<!-- Shop popup panel -->
-	{#if selectedShop}
-		<div class="side-panel">
-			<ShopCard shop={selectedShop} />
-			<button class="panel-close" on:click={closePanel} aria-label={lang === 'en' ? 'Close' : '閉じる'}>&times;</button>
-		</div>
-	{/if}
+	<section class="section">
+		<h2 class="section-title">About Listed Shops</h2>
+		<p>We currently list <strong>48 direct-lineage Ramen Jiro locations</strong>, covering all of Japan from Hokkaido to Fukuoka. The shop list is updated as needed.</p>
+		<p>Information (hours, closed days, address, etc.) is compiled from publicly available sources, but may change without notice due to individual shop circumstances. Please check each shop's official social media for the latest information before visiting.</p>
+	</section>
+
+	<section class="section">
+		<h2 class="section-title">Disclaimer</h2>
+		<p>While we strive to provide accurate information, we cannot guarantee the accuracy, completeness, or timeliness of any content on this service. We accept no responsibility for any loss or inconvenience resulting from reliance on information provided here.</p>
+	</section>
 </div>
+{:else}
+<div class="about-page">
+	<section class="hero">
+		<h1>現在地から<br>ラーメン二郎を探す</h1>
+		<p>全国48店舗の直系二郎をリアルタイムで。営業中かどうかを地図上のピンで一目確認。</p>
+		<a href={lang === 'en' ? '/en/map' : '/map'} class="cta-button">地図で探す →</a>
+	</section>
+
+	<section class="section">
+		<h2 class="section-title">ラーメン二郎とは</h2>
+		<p>ラーメン二郎は1968年に東京・三田で創業した、独自のスタイルを持つラーメンです。豚骨醤油ベースの濃厚なスープ、極太麺、大量の野菜（モヤシ・キャベツ）、大きな豚肉（通称「豚」）が特徴で、そのボリュームと個性的な味が熱狂的なファン「ジロリアン」を生み出しています。</p>
+		<p>直系店舗は全国で約50店舗。本店から暖簾分けを受けた店主がそれぞれ運営しており、基本スタイルを継承しつつも店ごとに異なる個性を持ちます。注文時に野菜・ニンニク・背脂・醤油の量を伝える「コール」と呼ばれる文化も二郎ならではです。</p>
+		<figure class="jiro-photo">
+			<img
+				src="/jiro.jpg"
+				alt="ラーメン二郎 三田本店 大ラーメン 全マシマシ"
+				loading="lazy"
+				class="jiro-img"
+			/>
+			<figcaption class="jiro-caption">三田本店の大ラーメン、コール「全マシマシ」。ヤサイ・ニンニク・アブラ・カラメすべて増量した、二郎の真骨頂とも言える一杯。</figcaption>
+		</figure>
+	</section>
+
+	<section class="section">
+		<h2 class="section-title">「ニンニク入れますか？」とは</h2>
+		<p>ラーメン二郎の店内で、麺が仕上がるころに店員から発せられるこの一言は、今や二郎文化の象徴となっています。もともとはごく実用的な理由から生まれました。二郎では一度に複数人分の麺をまとめて茹でるため、丼が完成する直前まで客に声をかけるタイミングがありません。この仕組みが広まる以前は、初めての客が「いつトッピングを伝えればいいのか」わからず、最初に声をかけて「後で聞くから」と言われ、萎縮したまま食べた——そんな経験をした人も少なくなかったといいます。</p>
+		<p>「ニンニク入れますか？」という問いかけはその混乱を解消するために生まれ、やがて二郎ならではのコミュニケーションとして定着しました。デフォルトで入れるのではなく、あえて聞くことで、ニンニクが苦手な人や翌日に予定がある人も気軽に断ることができます。この小さな配慮が、独特の接客スタイルとして語られることもあります。</p>
+		<p>この文化はその後、各地の暖簾分け店へと受け継がれていきましたが、聞き方・タイミング・確認する項目は店によって異なります。「ニンニク入れますか？」はあくまでも一例であり、二郎という文化が積み重ねてきた対話の形のひとつです。</p>
+	</section>
+
+	<section class="section">
+		<h2 class="section-title">主な機能</h2>
+		<ul class="feature-list">
+			<li>
+				<span class="feature-icon">📍</span>
+				<div>
+					<strong>現在地から二郎を検索</strong>
+					<p>GPS で現在地を取得し、周辺の直系店舗を地図上にピン表示します。現在地を中心に<strong>青い半透明の円</strong>が表示され、検索範囲を示します。範囲は5〜50kmのスライダーで調整できます。</p>
+				</div>
+			</li>
+			<li>
+				<span class="feature-icon">🔴</span>
+				<div>
+					<strong>ピンの色でステータスがわかる</strong>
+					<p>営業中と思われる店舗は<strong>赤いピン</strong>、閉店・定休日の店舗は<strong>グレーのピン</strong>で表示されます。自分の現在地は<strong>青いピン</strong>で表示されます。</p>
+				</div>
+			</li>
+			<li>
+				<span class="feature-icon">🗺</span>
+				<div>
+					<strong>地図中心モード</strong>
+					<p>「地図中心」モードに切り替えると、地図をスクロールした先の場所を基準に店舗を検索できます。旅行先や移動中の立ち寄りスポット探しに便利です。地図中央に<strong>緑のピン</strong>と緑の半透明な円が表示され、検索の中心と範囲を示します。</p>
+				</div>
+			</li>
+			<li>
+				<span class="feature-icon">🧭</span>
+				<div>
+					<strong>ルート案内</strong>
+					<p>ピンをタップして店舗カードを開き「ルートを見る」ボタンを押すと、Google マップで現在地からのルート（交通機関）を確認できます。</p>
+				</div>
+			</li>
+		</ul>
+	</section>
+
+	<section class="section">
+		<h2 class="section-title">使い方</h2>
+		<ol class="steps">
+			<li><strong>位置情報を許可する</strong> — ページを開くとブラウザが現在地の取得許可を求めます。許可すると自動的に近くの店舗が表示されます。</li>
+			<li><strong>赤いピンを確認する</strong> — 赤いピンが今営業中と思われる店舗です。グレーのピンは閉店・定休日の店舗です。</li>
+			<li><strong>スライダーで範囲を調整する</strong> — 画面下部のスライダーで検索範囲を5〜50kmの間で変更できます。デフォルトは10kmです。</li>
+			<li><strong>ピンをタップして詳細を見る</strong> — 店舗カードに営業時間・最寄駅・ルートボタンが表示されます。</li>
+		</ol>
+	</section>
+
+	<section class="section">
+		<h2 class="section-title">掲載店舗について</h2>
+		<p>現在、<strong>ラーメン二郎の直系店舗48店舗</strong>を掲載しています。北海道から福岡まで全国をカバーしており、店舗数は随時更新しています。</p>
+		<p>掲載情報（営業時間・定休日・住所など）は公開情報をもとに作成していますが、店舗の都合により予告なく変更される場合があります。訪問前には各店舗の公式 SNS 等で最新情報をご確認ください。</p>
+	</section>
+
+	<section class="section">
+		<h2 class="section-title">免責事項</h2>
+		<p>本サービスに掲載している情報は、可能な限り正確な情報を提供するよう努めていますが、その内容の正確性・完全性・最新性を保証するものではありません。掲載情報に基づいて訪問した結果生じた損害について、当サービスは一切の責任を負いません。</p>
+	</section>
+</div>
+{/if}
 
 <style>
-	.page {
-		position: relative;
+	.about-page {
+		max-width: 640px;
+		margin: 0 auto;
+		padding: 24px 16px 48px;
+	}
+
+	.hero {
+		text-align: center;
+		padding: 48px 16px 40px;
+		background: linear-gradient(135deg, #fef2f2 0%, #fff 100%);
+		border-radius: 12px;
+		margin-bottom: 32px;
+	}
+
+	.hero h1 {
+		font-size: 28px;
+		font-weight: 700;
+		color: #1f2937;
+		margin: 0 0 12px;
+		line-height: 1.3;
+	}
+
+	.hero p {
+		font-size: 15px;
+		color: #6b7280;
+		margin: 0 0 24px;
+	}
+
+	.cta-button {
+		display: inline-block;
+		background: #dc2626;
+		color: #fff;
+		font-size: 16px;
+		font-weight: 600;
+		padding: 14px 32px;
+		border-radius: 8px;
+		text-decoration: none;
+	}
+
+	.cta-button:hover {
+		background: #b91c1c;
+	}
+
+	.section {
+		margin-bottom: 32px;
+	}
+
+	.section-title {
+		font-size: 16px;
+		font-weight: 700;
+		color: var(--color-text, #1f2937);
+		margin: 0 0 12px;
+		padding-bottom: 8px;
+		border-bottom: 2px solid #dc2626;
+	}
+
+	p {
+		font-size: 14px;
+		line-height: 1.8;
+		color: var(--color-text, #1f2937);
+		margin: 0 0 10px;
+	}
+
+	.feature-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
 		display: flex;
 		flex-direction: column;
+		gap: 16px;
 	}
 
-	.tagline {
+	.feature-list li {
+		display: flex;
+		gap: 12px;
+		align-items: flex-start;
+	}
+
+	.feature-icon {
+		font-size: 20px;
+		flex-shrink: 0;
+		margin-top: 2px;
+	}
+
+	.feature-list strong {
+		display: block;
+		font-size: 14px;
+		font-weight: 600;
+		margin-bottom: 4px;
+	}
+
+	.feature-list p {
 		margin: 0;
-		padding: 6px 16px;
-		font-size: 12px;
-		color: #6b7280;
-		background: #f9fafb;
-		border-bottom: 1px solid #e5e7eb;
-		text-align: center;
-	}
-
-	.map-wrap {
-		position: relative;
-		height: calc(100vh - var(--header-height, 52px) - 31px);
-		height: calc(100dvh - var(--header-height, 52px) - 31px);
-	}
-
-	.locate-btn {
-		position: absolute;
-		bottom: calc(80px + env(safe-area-inset-bottom, 0px));
-		right: 10px;
-		z-index: 800;
-		background: #fff;
-		border: 2px solid rgba(0, 0, 0, 0.2);
-		border-radius: 6px;
-		width: 36px;
-		height: 36px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		cursor: pointer;
-		color: #555;
-		padding: 0;
-		transition: background 0.15s;
-	}
-
-	.locate-btn:hover {
-		background: #f4f4f4;
-	}
-
-	.loading-badge {
-		position: absolute;
-		top: 10px;
-		left: 50%;
-		transform: translateX(-50%);
-		z-index: 800;
-		background: rgba(0, 0, 0, 0.65);
-		color: #fff;
-		font-size: 12px;
-		padding: 4px 12px;
-		border-radius: 999px;
-	}
-
-	.side-panel {
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		z-index: 900;
-		background: var(--color-bg, #fff);
-		border-top: 1px solid var(--color-border, #e5e7eb);
-		border-radius: 16px 16px 0 0;
-		padding: 16px;
-		max-height: 60vh;
-		overflow-y: auto;
-		box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12);
-	}
-
-	.panel-close {
-		position: absolute;
-		top: 12px;
-		right: 12px;
-		background: none;
-		border: none;
-		font-size: 22px;
-		cursor: pointer;
-		color: var(--color-muted, #6b7280);
-		min-height: 44px;
-		min-width: 44px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	@media (min-width: 768px) {
-		.side-panel {
-			position: absolute;
-			bottom: auto;
-			top: 16px;
-			left: 16px;
-			right: auto;
-			width: 340px;
-			border-radius: 12px;
-			border: 1px solid var(--color-border, #e5e7eb);
-			max-height: calc(100% - 32px);
-			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-		}
-	}
-
-	.radius-control {
-		position: absolute;
-		bottom: calc(10px + env(safe-area-inset-bottom, 0px));
-		left: 50%;
-		transform: translateX(-50%);
-		width: 55%;
-		z-index: 800;
-		background: #fff;
-		border: 2px solid rgba(0, 0, 0, 0.2);
-		border-radius: 8px;
-		padding: 6px 10px;
-		display: flex;
-		align-items: center;
-		gap: 8px;
-	}
-
-	.radius-slider {
-		flex: 1;
-		accent-color: #2563eb;
-		cursor: pointer;
-		min-width: 0;
-	}
-
-	.radius-value {
 		font-size: 13px;
-		font-weight: 600;
-		color: #374151;
-		white-space: nowrap;
-		min-width: 36px;
-		text-align: right;
-		user-select: none;
+		color: var(--color-muted, #6b7280);
 	}
 
-	.mode-btn {
-		position: absolute;
-		top: 10px;
-		right: 10px;
-		z-index: 800;
-		background: #fff;
-		border: 2px solid rgba(0, 0, 0, 0.2);
-		border-radius: 6px;
-		padding: 5px 10px;
+	.steps {
+		margin: 0;
+		padding-left: 20px;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.steps li {
+		font-size: 14px;
+		line-height: 1.7;
+		color: var(--color-text, #1f2937);
+	}
+
+	.jiro-photo {
+		margin: 16px 0 0;
+	}
+
+	.jiro-img {
+		width: 100%;
+		border-radius: 8px;
+		display: block;
+	}
+
+	.jiro-caption {
 		font-size: 12px;
-		font-weight: 600;
-		cursor: pointer;
-		color: #555;
-		transition: background 0.15s;
-		white-space: nowrap;
-	}
-
-	.mode-btn:hover {
-		background: #f4f4f4;
-	}
-
-	.mode-btn.active {
-		background: #eff6ff;
-		color: #2563eb;
-		border-color: #2563eb;
+		line-height: 1.6;
+		color: var(--color-muted, #6b7280);
+		margin-top: 6px;
 	}
 </style>

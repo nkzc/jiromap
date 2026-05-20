@@ -6,10 +6,12 @@ export const GET: RequestHandler = async ({ platform }) => {
 	// 固定ページ（ja + en）
 	const staticPages = [
 		{ url: '/', priority: '1.0', changefreq: 'always' },
+		{ url: '/map', priority: '0.9', changefreq: 'always' },
 		{ url: '/shops', priority: '0.9', changefreq: 'always' },
 		{ url: '/about', priority: '0.5', changefreq: 'monthly' },
 		{ url: '/privacy', priority: '0.3', changefreq: 'yearly' },
 		{ url: '/en', priority: '1.0', changefreq: 'always' },
+		{ url: '/en/map', priority: '0.9', changefreq: 'always' },
 		{ url: '/en/shops', priority: '0.9', changefreq: 'always' },
 		{ url: '/en/about', priority: '0.5', changefreq: 'monthly' },
 		{ url: '/en/privacy', priority: '0.3', changefreq: 'yearly' }

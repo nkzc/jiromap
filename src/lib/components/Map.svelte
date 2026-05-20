@@ -25,6 +25,7 @@
 	let centerMarker: import('leaflet').Marker | null = null;
 	let radiusCircle: import('leaflet').Circle | null = null;
 	let L: typeof import('leaflet') | null = null;
+	let currentTileLayer: import('leaflet').TileLayer | null = null;
 
 	function createPinIcon(leaflet: typeof import('leaflet'), color: string): import('leaflet').DivIcon {
 		const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 36" width="24" height="36">
@@ -145,7 +146,7 @@
 			? '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 			: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
 
-		L.tileLayer(tileUrl, {
+		currentTileLayer = L.tileLayer(tileUrl, {
 			attribution,
 			maxZoom: 19
 		}).addTo(map);
@@ -180,6 +181,18 @@
 	}
 	$: if (L && map) {
 		updateRadiusCircle(L, circleLat, circleLng, radiusM, mapMode);
+	}
+	$: if (L && map && currentTileLayer) {
+		const isJa = lang === 'ja';
+		const tileUrl = isJa
+			? 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+			: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+		const attribution = isJa
+			? '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+			: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
+
+		currentTileLayer.remove();
+		currentTileLayer = L.tileLayer(tileUrl, { attribution, maxZoom: 19 }).addTo(map);
 	}
 
 	export function panTo(lat: number, lng: number) {

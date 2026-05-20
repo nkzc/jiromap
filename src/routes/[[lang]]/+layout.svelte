@@ -52,6 +52,9 @@
 			<span class="brand-name">{tr.siteTitle}</span>
 		</a>
 		<nav class="nav">
+			<a href={lang === 'en' ? '/en/map' : '/map'} class="nav-map-btn">
+				{lang === 'en' ? 'Map' : '地図'}
+			</a>
 			<a href={lang === 'en' ? '/en/about' : '/about'} class="nav-link">{tr.nav.about}</a>
 			<a href={lang === 'en' ? '/en/shops' : '/shops'} class="nav-link">{tr.nav.list}</a>
 			<button class="lang-btn" on:click={switchLang} aria-label="Switch language">
@@ -156,6 +159,21 @@
 	.nav-link:hover {
 		background: rgba(255, 255, 255, 0.2);
 		color: #fff;
+	}
+
+	.nav-map-btn {
+		background: #fff;
+		color: #dc2626;
+		font-weight: 600;
+		font-size: 13px;
+		padding: 6px 14px;
+		border-radius: 6px;
+		text-decoration: none;
+		border: 1.5px solid #fff;
+	}
+
+	.nav-map-btn:hover {
+		background: #fef2f2;
 	}
 
 	.lang-btn {
