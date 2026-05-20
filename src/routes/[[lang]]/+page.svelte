@@ -152,7 +152,7 @@
 				<span class="feature-icon">🔴</span>
 				<div>
 					<strong>ピンの色でステータスがわかる</strong>
-					<p>営業中と思われる店舗は<strong>赤いピン</strong>、閉店・定休日の店舗は<strong>グレーのピン</strong>で表示されます。自分の現在地は<strong>青いピン</strong>で表示されます。</p>
+					<p>営業中と思われる店舗は<strong>赤いピン</strong>で表示されます。閉店・定休日は<strong>グレーのピン</strong>、現在地は<strong>青いピン</strong>です。</p>
 				</div>
 			</li>
 			<li>
