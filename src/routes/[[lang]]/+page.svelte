@@ -54,6 +54,34 @@
 	</section>
 
 	<section class="section">
+		<h2 class="section-title">What Are Direct-Lineage Shops?</h2>
+		<p>Ramen Jiro has a group of shops known as <em>chokukei</em> (direct-lineage). A direct-lineage shop is run by an owner who trained at the Mita main store and received official permission from the founder to open their own location. Only these shops may use the "Ramen Jiro" name — and this service lists only direct-lineage shops.</p>
+		<p>Separately, many shops across Japan draw inspiration from Jiro's style without official affiliation. Commonly called "Jiro-kei" or "inspire-kei," they may look and taste similar but have not received formal permission and do not carry the "Ramen Jiro" name. Jiro Map covers direct-lineage shops only; Jiro-inspired locations are not included.</p>
+	</section>
+
+	<section class="section">
+		<h2 class="section-title">Frequently Asked Questions</h2>
+		<dl class="faq-list">
+			<div class="faq-item">
+				<dt>What's the difference between direct-lineage and Jiro-inspired shops?</dt>
+				<dd>Direct-lineage shops are run by owners who trained at the Mita main store and received official permission from the founder. Jiro-inspired shops replicate the style independently, without any official affiliation.</dd>
+			</div>
+			<div class="faq-item">
+				<dt>Any tips for first-timers?</dt>
+				<dd>It's good manners to finish everything in your bowl. If it's your first time, start with a smaller portion rather than going all out. Each shop may have its own unwritten rules — pay attention to signs and follow the lead of regulars.</dd>
+			</div>
+			<div class="faq-item">
+				<dt>Why do opening hours sometimes change without notice?</dt>
+				<dd>Each shop is independently owned and operated. Temporary closures or early closing can happen due to sell-outs or the owner's circumstances. Always check the shop's social media before visiting.</dd>
+			</div>
+			<div class="faq-item">
+				<dt>Why aren't Jiro-inspired shops listed?</dt>
+				<dd>This service covers official direct-lineage Ramen Jiro locations only. Jiro-style and inspired shops are not included.</dd>
+			</div>
+		</dl>
+	</section>
+
+	<section class="section">
 		<h2 class="section-title">Key Features</h2>
 		<ul class="feature-list">
 			<li>
@@ -136,6 +164,34 @@
 		<p>ラーメン二郎の店内で、麺が仕上がるころに店員から発せられるこの一言は、今や二郎文化の象徴となっています。もともとはごく実用的な理由から生まれました。二郎では一度に複数人分の麺をまとめて茹でるため、丼が完成する直前まで客に声をかけるタイミングがありません。この仕組みが広まる以前は、初めての客が「いつトッピングを伝えればいいのか」わからず、最初に声をかけて「後で聞くから」と言われ、萎縮したまま食べた——そんな経験をした人も少なくなかったといいます。</p>
 		<p>「ニンニク入れますか？」という問いかけはその混乱を解消するために生まれ、やがて二郎ならではのコミュニケーションとして定着しました。デフォルトで入れるのではなく、あえて聞くことで、ニンニクが苦手な人や翌日に予定がある人も気軽に断ることができます。この小さな配慮が、独特の接客スタイルとして語られることもあります。</p>
 		<p>この文化はその後、各地の暖簾分け店へと受け継がれていきましたが、聞き方・タイミング・確認する項目は店によって異なります。「ニンニク入れますか？」はあくまでも一例であり、二郎という文化が積み重ねてきた対話の形のひとつです。</p>
+	</section>
+
+	<section class="section">
+		<h2 class="section-title">直系店舗とは</h2>
+		<p>ラーメン二郎には「直系」と呼ばれる店舗群があります。直系とは、三田本店で修業を積み、創業者から暖簾分けの許可を受けた店主が営む店舗のことです。「ラーメン二郎」の屋号を名乗れるのはこの直系店舗のみで、本サービスもこの直系店舗のみを掲載しています。</p>
+		<p>これとは別に、二郎のスタイルを参考にして独自に営業する「二郎系（インスパイア系）」と呼ばれる店も全国に多数存在します。味や見た目が二郎に近いものも多いですが、正式な暖簾分けを受けていないため、屋号に「二郎」は含まれません。二郎マップでは直系のみを対象としているため、二郎系・インスパイア系の店舗は掲載対象外です。</p>
+	</section>
+
+	<section class="section">
+		<h2 class="section-title">よくある質問</h2>
+		<dl class="faq-list">
+			<div class="faq-item">
+				<dt>直系店舗とインスパイア系の違いは？</dt>
+				<dd>直系は三田本店で修業し創業者から許可を受けた店舗です。インスパイア系は二郎スタイルを参考にした独立店舗で、公式な関係はありません。</dd>
+			</div>
+			<div class="faq-item">
+				<dt>初めて行くときに気をつけることは？</dt>
+				<dd>提供された料理は残さず食べきるのが基本的なマナーです。初めての方はまず小ラーメンや普通盛りから試すことをおすすめします。店によって独自のルールがある場合もあるため、店内の張り紙や常連客の様子を参考にしてください。</dd>
+			</div>
+			<div class="faq-item">
+				<dt>営業時間が急に変わることがあるのはなぜ？</dt>
+				<dd>各店舗は独立した個人経営のため、仕込みの状況・麺の売り切れ・店主の体調などにより臨時休業や早閉まいが発生することがあります。訪問前に各店舗のSNSで最新情報をご確認ください。</dd>
+			</div>
+			<div class="faq-item">
+				<dt>二郎系・インスパイア系の店舗が表示されないのはなぜ？</dt>
+				<dd>本サービスは直系店舗のみを対象としています。二郎系・インスパイア系の店舗は掲載していません。</dd>
+			</div>
+		</dl>
 	</section>
 
 	<section class="section">
@@ -322,5 +378,32 @@
 		line-height: 1.6;
 		color: var(--color-muted, #6b7280);
 		margin-top: 6px;
+	}
+
+	.faq-list {
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+
+	.faq-item {
+		border-left: 3px solid #dc2626;
+		padding-left: 12px;
+	}
+
+	.faq-item dt {
+		font-size: 14px;
+		font-weight: 600;
+		color: var(--color-text, #1f2937);
+		margin-bottom: 4px;
+	}
+
+	.faq-item dd {
+		font-size: 13px;
+		line-height: 1.7;
+		color: var(--color-muted, #6b7280);
+		margin: 0;
 	}
 </style>
