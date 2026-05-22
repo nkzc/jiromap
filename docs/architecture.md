@@ -74,7 +74,7 @@ jiro/
 │       │   └── [id]/
 │       │       ├── +page.svelte    # 店舗詳細（JSON-LD・外部リンク・「この店のルール」セクション）
 │       │       └── +page.ts        # SSR データ取得（shop + recentReports）
-│       ├── about/+page.svelte      # サービス説明（6セクション: サービス紹介・機能・FAQ・免責事項等）
+│       ├── about/+page.svelte      # 制作背景ページ（4つの動機・トップページへ戻るボタン）
 │       ├── guide/+page.svelte      # 頼み方ガイド（5セクション・免責事項付き）
 │       ├── privacy/+page.svelte    # プライバシーポリシー
 │       ├── terms/+page.svelte      # 利用規約
