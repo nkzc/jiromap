@@ -63,7 +63,7 @@ jiro/
 │   │       └── AdPlaceholder.svelte # 開発用広告プレースホルダー
 │   │
 │   └── routes/
-│       ├── +layout.svelte          # グローバルナビ（ヘッダーに「地図」/「Map」ボタンあり）・AdSense スクリプト・canonical（フッターに /about リンクあり）
+│       ├── +layout.svelte          # グローバルナビ（ヘッダーに「地図」/「Map」ボタンあり）・AdSense スクリプト・canonical（フッターに /about・/contact・/glossary・/guide リンクあり）
 │       ├── +page.svelte            # トップページ（ランディングページ: 二郎解説・ニンニク文化・機能説明・地図への CTA ボタン）
 │       ├── map/
 │       │   └── +page.svelte        # 地図ページ（地図 + 30秒ポーリング + 検索範囲スライダー + 地図中心モードトグル）
@@ -75,10 +75,12 @@ jiro/
 │       │       ├── +page.svelte    # 店舗詳細（JSON-LD・外部リンク・「この店のルール」セクション）
 │       │       └── +page.ts        # SSR データ取得（shop + recentReports）
 │       ├── about/+page.svelte      # 制作背景ページ（4つの動機・トップページへ戻るボタン）
-│       ├── guide/+page.svelte      # 頼み方ガイド（5セクション・免責事項付き）
+│       ├── contact/+page.svelte    # お問い合わせページ（メールアドレス掲載・日英両対応）
+│       ├── glossary/+page.svelte   # 二郎用語集（13語・日英対応）
+│       ├── guide/+page.svelte      # 初心者向けガイド（5セクション・免責事項付き・日英対応）
 │       ├── privacy/+page.svelte    # プライバシーポリシー
 │       ├── terms/+page.svelte      # 利用規約
-│       ├── sitemap.xml/+server.ts  # 動的 sitemap 生成（/map・/en/map・/about priority:0.5・/guide priority:0.6 を含む）
+│       ├── sitemap.xml/+server.ts  # 動的 sitemap 生成（/map・/en/map・/about priority:0.5 等を含む）
 │       ├── googled6c3660b134714e9.html/+server.ts  # Google Search Console 確認
 │       └── api/
 │           ├── health/+server.ts          # GET /api/health
