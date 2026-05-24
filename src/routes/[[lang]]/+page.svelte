@@ -79,6 +79,9 @@
 				<dd>This service covers official direct-lineage Ramen Jiro locations only. Jiro-style and inspired shops are not included.</dd>
 			</div>
 		</dl>
+		<div class="internal-link-box">
+			<p>Want to learn more Jiro terminology? Check out the <a href="/en/glossary">Jiro Glossary</a>.</p>
+		</div>
 	</section>
 
 	<section class="section">
@@ -123,6 +126,9 @@
 			<li><strong>Adjust the radius</strong> — Use the slider at the bottom of the screen to change the search range from 5–50km. Default is 10km.</li>
 			<li><strong>Tap a pin for details</strong> — The shop card shows hours, nearest station, and a button to open directions.</li>
 		</ol>
+		<div class="internal-link-box">
+			<p>Heading to Jiro for the first time? See the <a href="/en/guide">First-Timer's Guide</a>.</p>
+		</div>
 	</section>
 
 	<section class="section">
@@ -192,6 +198,9 @@
 				<dd>本サービスは直系店舗のみを対象としています。二郎系・インスパイア系の店舗は掲載していません。</dd>
 			</div>
 		</dl>
+		<div class="internal-link-box">
+			<p>二郎用語をもっと詳しく知りたい方は<a href="/glossary">用語集</a>をご覧ください。</p>
+		</div>
 	</section>
 
 	<section class="section">
@@ -236,6 +245,9 @@
 			<li><strong>スライダーで範囲を調整する</strong> — 画面下部のスライダーで検索範囲を5〜50kmの間で変更できます。デフォルトは10kmです。</li>
 			<li><strong>ピンをタップして詳細を見る</strong> — 店舗カードに営業時間・最寄駅・ルートボタンが表示されます。</li>
 		</ol>
+		<div class="internal-link-box">
+			<p>初めて二郎に行く方は<a href="/guide">初心者ガイド</a>も参考にしてください。</p>
+		</div>
 	</section>
 
 	<section class="section">
@@ -405,5 +417,21 @@
 		line-height: 1.7;
 		color: var(--color-muted, #6b7280);
 		margin: 0;
+	}
+
+	.internal-link-box {
+		margin: 12px 0 0;
+		padding: 12px 16px;
+		background: #fef2f2;
+		border-radius: 8px;
+		font-size: 14px;
+		line-height: 1.7;
+		color: var(--color-text, #1f2937);
+	}
+
+	.internal-link-box a {
+		color: #dc2626;
+		font-weight: 600;
+		text-decoration: underline;
 	}
 </style>

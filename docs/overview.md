@@ -52,7 +52,7 @@ Google AdSense による広告収益化が目的。
 │       メールアドレス掲載・日英両対応
 ├── /privacy （プライバシーポリシー）
 ├── /terms （利用規約）
-└── /sitemap.xml （動的サイトマップ・/map・/en/map・/about・/shops 等を含む）
+└── /sitemap.xml （動的サイトマップ・/map・/en/map・/about・/contact・/glossary・/guide・/shops 等を含む）
 ```
 
 ---

@@ -80,7 +80,7 @@ jiro/
 │       ├── guide/+page.svelte      # 初心者向けガイド（5セクション・免責事項付き・日英対応）
 │       ├── privacy/+page.svelte    # プライバシーポリシー
 │       ├── terms/+page.svelte      # 利用規約
-│       ├── sitemap.xml/+server.ts  # 動的 sitemap 生成（/map・/en/map・/about priority:0.5 等を含む）
+│       ├── sitemap.xml/+server.ts  # 動的 sitemap 生成（/map・/en/map・/about・/contact・/glossary・/guide・/shops 等を含む）
 │       ├── googled6c3660b134714e9.html/+server.ts  # Google Search Console 確認
 │       └── api/
 │           ├── health/+server.ts          # GET /api/health
