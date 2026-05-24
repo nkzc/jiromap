@@ -43,6 +43,11 @@
 	</section>
 
 	<section class="history-section">
+		<h2 class="section-title">Word of Mouth and Queue Culture</h2>
+		<p class="section-body">Jiro built its reputation entirely through word of mouth — no advertising, no marketing. The sheer volume and distinctive taste created devoted regulars, and before long, long queues became a permanent fixture outside the shop. Waiting in line came to be seen as part of the Jiro experience itself.</p>
+	</section>
+
+	<section class="history-section">
 		<h2 class="section-title">Norenwake and the Birth of Direct-Lineage Shops</h2>
 		<p class="section-body">As staff trained at the Mita main store and received the founder's blessing to open their own locations, the direct-lineage system was born. Each owner carries the Jiro style forward while bringing their own character to the shop. Today, there are around 50 direct-lineage locations across Japan.</p>
 	</section>
@@ -72,6 +77,11 @@
 	<section class="history-section">
 		<h2 class="section-title">スタイルの確立</h2>
 		<p class="section-body">開店当初から現在の二郎スタイルが完成していたわけではありません。試行錯誤を重ねる中で、大量の野菜（モヤシ・キャベツ）、厚切りの豚肉、背脂といった特徴が徐々に形作られていきました。「ニンニク入れますか？」というコール文化も、客と店のやりとりの中で自然に生まれ、定着していったものです。</p>
+	</section>
+
+	<section class="history-section">
+		<h2 class="section-title">口コミと行列文化</h2>
+		<p class="section-body">広告も宣伝もなく、二郎の評判は口コミだけで広がっていきました。独自のボリュームと味は熱狂的なリピーターを生み、やがて店の前に行列が絶えない状態が定着しました。長い行列に並ぶこと自体が「二郎体験」の一部として受け入れられ、それもまた二郎文化の一側面となっています。</p>
 	</section>
 
 	<section class="history-section">

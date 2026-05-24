@@ -34,7 +34,7 @@
 
 	<section class="guide-section">
 		<h2 class="section-title"><span class="step-num">1</span>Lining Up</h2>
-		<p class="section-body">Expect a queue outside. Holding spots for others (having one person save multiple seats) is not allowed. Whether you buy your ticket before or after joining the line depends on the shop — follow the signs at the entrance or watch what other customers do. Wait for staff to guide you to a seat.</p>
+		<p class="section-body">Expect a queue outside. Holding spots for others (having one person save multiple seats) is not allowed. Whether you buy your ticket before or after joining the line depends on the shop — follow the signs at the entrance or watch what other customers do. Wait for staff to guide you to a seat. Most shops do not take reservations — it's always walk-in, first come first served.</p>
 	</section>
 
 	<section class="guide-section">
@@ -43,7 +43,12 @@
 	</section>
 
 	<section class="guide-section">
-		<h2 class="section-title"><span class="step-num">3</span>How to Call (Order Toppings)</h2>
+		<h2 class="section-title"><span class="step-num">3</span>Payment</h2>
+		<p class="section-body">Many shops are cash only. Cards and electronic payments may not be accepted, so it's a good idea to have cash on hand before you go.</p>
+	</section>
+
+	<section class="guide-section">
+		<h2 class="section-title"><span class="step-num">4</span>How to Call (Order Toppings)</h2>
 		<p class="section-body">Just before your noodles are ready, staff will ask: "Ninniku iremasuka?" ("Do you want garlic?"). At minimum, you need to answer yes or no for garlic. For yasai, abura, and karame, simply say nothing if you want the default amount — no call needed means no change.</p>
 		<div class="example-box">
 			<p class="example-label">Examples</p>
@@ -53,12 +58,12 @@
 	</section>
 
 	<section class="guide-section">
-		<h2 class="section-title"><span class="step-num">4</span>Eating Etiquette</h2>
-		<p class="section-body">Finish everything in your bowl — leaving food is considered bad manners. When you're done, many shops expect you to place your bowl on the counter.</p>
+		<h2 class="section-title"><span class="step-num">5</span>Eating Etiquette</h2>
+		<p class="section-body">Finish everything in your bowl — leaving food is considered bad manners. When you're done, many shops expect you to place your bowl on the counter. Once you're done, it's good manners to leave promptly and give the next person in line your seat.</p>
 	</section>
 
 	<section class="guide-section">
-		<h2 class="section-title"><span class="step-num">5</span>Tips for First-Timers</h2>
+		<h2 class="section-title"><span class="step-num">6</span>Tips for First-Timers</h2>
 		<p class="section-body">Extra-large topping options (mashi and above) may not be available at every shop. Start with the default portions and work your way up on future visits. Research the shop before your first visit.</p>
 	</section>
 
@@ -76,7 +81,7 @@
 
 	<section class="guide-section">
 		<h2 class="section-title"><span class="step-num">1</span>並び方</h2>
-		<p class="section-body">店外に行列ができていることが多い。代表待ち（一人で複数人分の席を確保すること）はNG。食券を並ぶ前に買う店・並んだ後に買う店があるため、入口の案内や前の客の動きを参考にする。席は店員の案内に従う。</p>
+		<p class="section-body">店外に行列ができていることが多い。代表待ち（一人で複数人分の席を確保すること）はNG。食券を並ぶ前に買う店・並んだ後に買う店があるため、入口の案内や前の客の動きを参考にする。席は店員の案内に従う。多くの店は予約不可で、当日並んだ順に入店となる。</p>
 	</section>
 
 	<section class="guide-section">
@@ -85,7 +90,12 @@
 	</section>
 
 	<section class="guide-section">
-		<h2 class="section-title"><span class="step-num">3</span>コールの仕方</h2>
+		<h2 class="section-title"><span class="step-num">3</span>支払い方法</h2>
+		<p class="section-body">多くの店舗で現金のみの対応となっています。カードや電子マネーが使えない場合があるため、事前に手元の現金を確認しておくと安心です。</p>
+	</section>
+
+	<section class="guide-section">
+		<h2 class="section-title"><span class="step-num">4</span>コールの仕方</h2>
 		<p class="section-body">麺が仕上がる直前に「ニンニク入れますか？」と声がかかる。ニンニクは入れるか入れないかを最低限伝える必要がある。ヤサイ・アブラ・カラメはコールしなければ増減なし。</p>
 		<div class="example-box">
 			<p class="example-label">例</p>
@@ -95,12 +105,12 @@
 	</section>
 
 	<section class="guide-section">
-		<h2 class="section-title"><span class="step-num">4</span>食べるときのマナー</h2>
-		<p class="section-body">残さず食べきるのが基本。食べ終わったら丼をカウンターに上げる店が多い。</p>
+		<h2 class="section-title"><span class="step-num">5</span>食べるときのマナー</h2>
+		<p class="section-body">残さず食べきるのが基本。食べ終わったら丼をカウンターに上げる店が多い。食べ終わったら長居せず、次の客に席を譲るのがマナーです。</p>
 	</section>
 
 	<section class="guide-section">
-		<h2 class="section-title"><span class="step-num">5</span>初心者へのひとことアドバイス</h2>
+		<h2 class="section-title"><span class="step-num">6</span>初心者へのひとことアドバイス</h2>
 		<p class="section-body">マシ以上の増量は対応していない店もある。まずは普通の分量から試すのがおすすめ。初めて行く店舗は事前に調べておくこと。</p>
 	</section>
 

@@ -74,11 +74,11 @@ jiro/
 │       │   └── [id]/
 │       │       ├── +page.svelte    # 店舗詳細（JSON-LD・外部リンク・「この店のルール」セクション）
 │       │       └── +page.ts        # SSR データ取得（shop + recentReports）
-│       ├── about/+page.svelte      # 制作背景ページ（4つの動機・トップページへ戻るボタン）
+│       ├── about/+page.svelte      # 制作背景ページ（4つの動機・掲載データについて・トップページへ戻るボタン）
 │       ├── contact/+page.svelte    # お問い合わせページ（メールアドレス掲載・日英両対応）
 │       ├── glossary/+page.svelte   # 二郎用語集（13語・日英対応）
-│       ├── guide/+page.svelte      # 初心者向けガイド（5セクション・免責事項付き・日英対応）
-│       ├── history/+page.svelte    # ラーメン二郎の歴史（4セクション・日英対応）
+│       ├── guide/+page.svelte      # 初心者向けガイド（6セクション・免責事項付き・日英対応）
+│       ├── history/+page.svelte    # ラーメン二郎の歴史（5セクション・日英対応）
 │       ├── privacy/+page.svelte    # プライバシーポリシー
 │       ├── terms/+page.svelte      # 利用規約
 │       ├── sitemap.xml/+server.ts  # 動的 sitemap 生成（/map・/en/map・/about・/contact・/glossary・/guide・/history・/shops 等を含む）

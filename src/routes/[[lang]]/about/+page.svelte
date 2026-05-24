@@ -66,6 +66,11 @@
 		</ul>
 	</section>
 
+	<section class="section">
+		<h2 class="section-title">About Our Data</h2>
+		<p class="data-note">Business hours and closed days listed on this service are based on publicly available information from each shop. As independently owned businesses, details can change without notice. Real-time crowd status is based on user-submitted reports and may not always be accurate. Please verify the latest information with each shop before visiting.</p>
+	</section>
+
 	<section class="section cta-section">
 		<a href="/en" class="back-btn">← Back to Top</a>
 	</section>
@@ -110,6 +115,11 @@
 				</div>
 			</li>
 		</ul>
+	</section>
+
+	<section class="section">
+		<h2 class="section-title">掲載データについて</h2>
+		<p class="data-note">掲載している営業時間・定休日などの情報は、各店舗の公開情報をもとに作成しています。個人経営の店舗のため、予告なく変更されることがあります。リアルタイムの混雑状況はユーザーからの投稿をもとに集計しており、常に正確とは限りません。訪問前には各店舗の最新情報をご確認ください。</p>
 	</section>
 
 	<section class="section cta-section">
@@ -193,6 +203,13 @@
 	}
 
 	.reason-body p {
+		font-size: 14px;
+		line-height: 1.8;
+		color: var(--color-muted, #6b7280);
+		margin: 0;
+	}
+
+	.data-note {
 		font-size: 14px;
 		line-height: 1.8;
 		color: var(--color-muted, #6b7280);
