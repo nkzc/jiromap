@@ -40,6 +40,10 @@ Google AdSense による広告収益化が目的。
 │       二郎系ラーメンの頼み方・マナー・初心者アドバイス（5セクション構成）
 │       免責事項あり・バージョン管理あり・日英対応
 │
+├── /history （ラーメン二郎の歴史）
+│       二郎の歴史を4セクションで解説・日英対応
+│       フッターからリンク
+│
 ├── /glossary （二郎用語集）
 │       二郎系ラーメン特有の用語を13語収録・日英対応
 │       フッターからリンク
@@ -52,7 +56,7 @@ Google AdSense による広告収益化が目的。
 │       メールアドレス掲載・日英両対応
 ├── /privacy （プライバシーポリシー）
 ├── /terms （利用規約）
-└── /sitemap.xml （動的サイトマップ・/map・/en/map・/about・/contact・/glossary・/guide・/shops 等を含む）
+└── /sitemap.xml （動的サイトマップ・/map・/en/map・/about・/contact・/glossary・/guide・/history・/shops 等を含む）
 ```
 
 ---

@@ -12,6 +12,7 @@ export const GET: RequestHandler = async ({ platform }) => {
 		{ url: '/contact', priority: '0.4', changefreq: 'yearly' },
 		{ url: '/glossary', priority: '0.6', changefreq: 'monthly' },
 		{ url: '/guide', priority: '0.6', changefreq: 'monthly' },
+		{ url: '/history', priority: '0.6', changefreq: 'yearly' },
 		{ url: '/privacy', priority: '0.3', changefreq: 'yearly' },
 		{ url: '/en', priority: '1.0', changefreq: 'always' },
 		{ url: '/en/map', priority: '0.9', changefreq: 'always' },
@@ -20,6 +21,7 @@ export const GET: RequestHandler = async ({ platform }) => {
 		{ url: '/en/contact', priority: '0.4', changefreq: 'yearly' },
 		{ url: '/en/glossary', priority: '0.6', changefreq: 'monthly' },
 		{ url: '/en/guide', priority: '0.6', changefreq: 'monthly' },
+		{ url: '/en/history', priority: '0.6', changefreq: 'yearly' },
 		{ url: '/en/privacy', priority: '0.3', changefreq: 'yearly' }
 	];
 

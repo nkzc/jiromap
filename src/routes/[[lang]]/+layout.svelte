@@ -73,6 +73,7 @@
 			<a href={lang === 'en' ? '/en/contact' : '/contact'} class="footer-link">{lang === 'en' ? 'Contact' : 'お問い合わせ'}</a>
 			<a href={lang === 'en' ? '/en/glossary' : '/glossary'} class="footer-link">{lang === 'en' ? 'Glossary' : '用語集'}</a>
 			<a href={lang === 'en' ? '/en/guide' : '/guide'} class="footer-link">{lang === 'en' ? 'Guide' : '初心者ガイド'}</a>
+			<a href={lang === 'en' ? '/en/history' : '/history'} class="footer-link">{lang === 'en' ? 'History' : '歴史'}</a>
 			<a href={lang === 'en' ? '/en/privacy' : '/privacy'} class="footer-link">{tr.footer.privacy}</a>
 		</nav>
 		<p class="footer-copy">&copy; 2026 {tr.siteTitle}</p>
