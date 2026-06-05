@@ -6,6 +6,7 @@
 	import { buildRestaurantJsonLd } from '$lib/seo.js';
 	import { buildTabelogUrl } from '$lib/affiliate.js';
 	import { t } from '$lib/i18n.js';
+	import { favorites } from '$lib/favorites.js';
 	import type { Report } from '$lib/types.js';
 
 	export let data: PageData;
@@ -83,6 +84,14 @@
 		<div class="page-header">
 			<a href={backHref} class="back-btn" aria-label={tr.shopDetail.backToList}>{tr.shopDetail.back}</a>
 			<h1 class="shop-title">{shop.name}</h1>
+			<button
+				class="fav-btn"
+				class:favorited={$favorites.includes(shop.id)}
+				on:click={() => favorites.toggle(shop.id)}
+				aria-label={$favorites.includes(shop.id) ? tr.favorites.remove : tr.favorites.add}
+			>
+				{$favorites.includes(shop.id) ? '♥' : '♡'}
+			</button>
 		</div>
 
 		<!-- Status card -->
@@ -254,6 +263,34 @@
 		color: var(--color-text, #1f2937);
 		margin: 0;
 		line-height: 1.3;
+		flex: 1;
+		min-width: 0;
+	}
+
+	.fav-btn {
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 44px;
+		min-height: 44px;
+		background: none;
+		border: none;
+		cursor: pointer;
+		font-size: 22px;
+		color: #d1d5db;
+		padding: 0;
+		margin-left: auto;
+		transition: color 0.15s, transform 0.1s;
+	}
+
+	.fav-btn:hover {
+		color: #dc2626;
+		transform: scale(1.15);
+	}
+
+	.fav-btn.favorited {
+		color: #dc2626;
 	}
 
 	.card {

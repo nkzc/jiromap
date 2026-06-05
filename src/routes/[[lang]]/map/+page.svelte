@@ -5,6 +5,7 @@
 	import { fetchNearbyShops } from '$lib/api.js';
 	import { MOCK_SHOPS } from '$lib/mock-data.js';
 	import { radiusKm } from '$lib/stores.js';
+	import { favorites } from '$lib/favorites.js';
 	import { RADIUS_MIN_KM, RADIUS_MAX_KM, RADIUS_STEP_KM } from '$lib/config.js';
 	import type { Shop } from '$lib/types.js';
 	import { buildWebsiteJsonLd } from '$lib/seo.js';
@@ -198,6 +199,7 @@
 			circleLat={mapMode === 'map' ? mapCenterLat : (userLat ?? 0)}
 			circleLng={mapMode === 'map' ? mapCenterLng : (userLng ?? 0)}
 			{lang}
+			favoriteIds={$favorites}
 		/>
 
 		<!-- Radius control -->

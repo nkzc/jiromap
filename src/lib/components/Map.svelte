@@ -17,6 +17,7 @@
 	export let circleLng: number = 0;
 	export let mapMode: 'gps' | 'map' = 'gps';
 	export let lang: string = 'ja';
+	export let favoriteIds: number[] = [];
 
 	let mapEl: HTMLDivElement;
 	let map: LeafletMap | null = null;
@@ -27,11 +28,14 @@
 	let L: typeof import('leaflet') | null = null;
 	let currentTileLayer: import('leaflet').TileLayer | null = null;
 
-	function createPinIcon(leaflet: typeof import('leaflet'), color: string): import('leaflet').DivIcon {
+	function createPinIcon(leaflet: typeof import('leaflet'), color: string, favorite = false): import('leaflet').DivIcon {
+		const inner = favorite
+			? `<text x="12" y="16" text-anchor="middle" font-size="10" fill="#ffffff">★</text>`
+			: `<circle cx="12" cy="12" r="5" fill="#ffffff"/>`;
 		const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 36" width="24" height="36">
     <path d="M12 0C5.373 0 0 5.373 0 12c0 9 12 24 12 24s12-15 12-24C24 5.373 18.627 0 12 0z"
           fill="${color}" stroke="#ffffff" stroke-width="1.5"/>
-    <circle cx="12" cy="12" r="5" fill="#ffffff"/>
+    ${inner}
   </svg>`;
 		return leaflet.divIcon({
 			html: svg,
@@ -64,8 +68,9 @@
 		if (!map) return;
 		clearMarkers();
 		for (const shop of shopList) {
+			const isFav = favoriteIds.includes(shop.id);
 			const color = isShopLikelyOpen(shop) ? '#dc2626' : '#64748b';
-			const icon = createPinIcon(leaflet, color);
+			const icon = createPinIcon(leaflet, color, isFav);
 			const marker = leaflet
 				.marker([shop.lat, shop.lng], { icon })
 				.addTo(map);
@@ -171,6 +176,7 @@
 	});
 
 	$: if (L && map) {
+		void favoriteIds;
 		addShopMarkers(L, shops);
 	}
 	$: if (L && map) {

@@ -24,6 +24,13 @@ export const t = {
 			empty: '周辺に店舗が見つかりませんでした',
 			within: 'km圏内'
 		},
+		favorites: {
+			add: 'お気に入り追加',
+			remove: 'お気に入り解除',
+			filter: 'お気に入りのみ表示',
+			empty: 'お気に入りの店舗はまだありません',
+			count: '件'
+		},
 		shopDetail: {
 			back: '←',
 			address: '住所',
@@ -76,6 +83,13 @@ export const t = {
 			loading: 'Loading...',
 			empty: 'No shops found nearby.',
 			within: 'km radius'
+		},
+		favorites: {
+			add: 'Add to Favorites',
+			remove: 'Remove from Favorites',
+			filter: 'Show Favorites Only',
+			empty: 'No favorites yet.',
+			count: ' saved'
 		},
 		shopDetail: {
 			back: '←',

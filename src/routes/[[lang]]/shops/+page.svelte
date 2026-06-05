@@ -5,6 +5,7 @@
 	import { fetchNearbyShops } from '$lib/api.js';
 	import { MOCK_SHOPS } from '$lib/mock-data.js';
 	import { radiusKm } from '$lib/stores.js';
+	import { favorites } from '$lib/favorites.js';
 	import type { Shop } from '$lib/types.js';
 	import { t } from '$lib/i18n.js';
 	import type { PageData } from './$types';
@@ -18,6 +19,17 @@
 	let shops: Shop[] = [];
 	let loading = true;
 	let error = '';
+	let showFavoritesOnly = false;
+
+	$: displayedShops = showFavoritesOnly
+		? shops.filter((s) => $favorites.includes(s.id))
+		: shops;
+
+	$: favCount = $favorites.length;
+
+	function toggleFavoritesFilter() {
+		showFavoritesOnly = !showFavoritesOnly;
+	}
 
 	function formatDistance(meters: number): string {
 		if (meters < 1000) return `${meters}m`;
@@ -76,41 +88,66 @@
 		{#if !loading}
 			<span class="shop-count">{shops.length}{lang === 'en' ? ' shops' : '件'}</span>
 		{/if}
+		<button
+			class="fav-filter-btn"
+			class:active={showFavoritesOnly}
+			on:click={toggleFavoritesFilter}
+			aria-pressed={showFavoritesOnly}
+		>
+			{showFavoritesOnly ? '♥' : '♡'}
+			{#if showFavoritesOnly && favCount > 0}
+				{lang === 'en' ? `${favCount}${tr.favorites.count}` : `お気に入り ${favCount}${tr.favorites.count}`}
+			{:else}
+				{tr.favorites.filter}
+			{/if}
+		</button>
 	</div>
 
 	{#if loading}
 		<div class="loading">{tr.shops.loading}</div>
 	{:else if shops.length === 0}
 		<div class="empty">{tr.shops.empty}</div>
+	{:else if showFavoritesOnly && displayedShops.length === 0}
+		<div class="empty">{tr.favorites.empty}</div>
 	{:else}
 		<ul class="shop-list">
-			{#each shops as shop, i}
+			{#each displayedShops as shop, i}
 				<li class="shop-item">
-					<a href="{lang === 'en' ? '/en' : ''}/shops/{shop.id}" class="shop-link">
-						<div class="shop-info">
-							<div class="shop-name-row">
-								<span class="shop-icon">📍</span>
-								<span class="shop-name">{shop.name}</span>
-								<span class="shop-distance">{formatDistance(shop.distance_m)}</span>
+					<div class="shop-item-row">
+						<a href="{lang === 'en' ? '/en' : ''}/shops/{shop.id}" class="shop-link">
+							<div class="shop-info">
+								<div class="shop-name-row">
+									<span class="shop-icon">📍</span>
+									<span class="shop-name">{shop.name}</span>
+									<span class="shop-distance">{formatDistance(shop.distance_m)}</span>
+								</div>
+								<div class="shop-status-row">
+									<WaitLevelBadge
+										level={shop.status?.current_wait_level}
+										label={shop.status?.wait_level_label}
+									/>
+									<span class="shop-category">
+										{shop.category === 'jiro' ? tr.shopDetail.jiro : tr.shopDetail.inspire}
+									</span>
+								</div>
+								{#if shop.business_hours}
+									<p class="shop-hours">{shop.business_hours}</p>
+								{/if}
 							</div>
-							<div class="shop-status-row">
-								<WaitLevelBadge
-									level={shop.status?.current_wait_level}
-									label={shop.status?.wait_level_label}
-								/>
-								<span class="shop-category">
-									{shop.category === 'jiro' ? tr.shopDetail.jiro : tr.shopDetail.inspire}
-								</span>
-							</div>
-							{#if shop.business_hours}
-								<p class="shop-hours">{shop.business_hours}</p>
-							{/if}
-						</div>
-					</a>
+						</a>
+						<button
+							class="fav-btn"
+							class:favorited={$favorites.includes(shop.id)}
+							on:click={(e) => { e.stopPropagation(); favorites.toggle(shop.id); }}
+							aria-label={$favorites.includes(shop.id) ? tr.favorites.remove : tr.favorites.add}
+						>
+							{$favorites.includes(shop.id) ? '♥' : '♡'}
+						</button>
+					</div>
 				</li>
 
 				<!-- Insert ad every 5 shops -->
-				{#if (i + 1) % 5 === 0 && i < shops.length - 1}
+				{#if (i + 1) % 5 === 0 && i < displayedShops.length - 1}
 					<li class="ad-item">
 						<AdBanner size="banner" />
 					</li>
@@ -186,8 +223,15 @@
 		border-bottom: 1px solid var(--color-border, #e5e7eb);
 	}
 
+	.shop-item-row {
+		display: flex;
+		align-items: stretch;
+	}
+
 	.shop-link {
 		display: block;
+		flex: 1;
+		min-width: 0;
 		padding: 14px 16px;
 		text-decoration: none;
 		color: inherit;
@@ -196,6 +240,59 @@
 
 	.shop-link:hover {
 		background: #f9fafb;
+	}
+
+	.fav-btn {
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 44px;
+		min-height: 44px;
+		background: none;
+		border: none;
+		cursor: pointer;
+		font-size: 20px;
+		color: #d1d5db;
+		padding: 0;
+		transition: color 0.15s, transform 0.1s;
+	}
+
+	.fav-btn:hover {
+		color: #dc2626;
+		transform: scale(1.15);
+	}
+
+	.fav-btn.favorited {
+		color: #dc2626;
+	}
+
+	.fav-filter-btn {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		margin-left: auto;
+		padding: 4px 10px;
+		border-radius: 999px;
+		border: 1px solid #e5e7eb;
+		background: #fff;
+		color: #6b7280;
+		font-size: 12px;
+		cursor: pointer;
+		white-space: nowrap;
+		transition: background 0.15s, color 0.15s, border-color 0.15s;
+	}
+
+	.fav-filter-btn:hover {
+		border-color: #dc2626;
+		color: #dc2626;
+	}
+
+	.fav-filter-btn.active {
+		background: #fef2f2;
+		border-color: #dc2626;
+		color: #dc2626;
+		font-weight: 600;
 	}
 
 	.shop-name-row {
